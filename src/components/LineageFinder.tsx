@@ -711,6 +711,29 @@ if (localArtist) {
               <span key={theme}>{theme}</span>
             ))}
           </div>
+          {/* Discography */}
+<section className="artist-discography">
+  <p className="section-label">DISCOGRAPHY</p>
+  <h3>Albums</h3>
+
+  {isLoadingAlbums ? (
+    <p>Loading albums...</p>
+  ) : albums.length > 0 ? (
+    <div className="album-list">
+      {albums.map((album) => (
+        <article className="album-item" key={album.id}>
+          <span className="album-year">
+            {album.date ? album.date.slice(0, 4) : "—"}
+          </span>
+
+          <h4>{album.title}</h4>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <p>No albums found.</p>
+  )}
+</section>
 
           {/* Lineage */}
        <section className="lineage-path">

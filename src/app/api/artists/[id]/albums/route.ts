@@ -26,15 +26,31 @@ export async function GET(
 
     const albums = (data["release-groups"] ?? [])
       .filter(
-        (releaseGroup: {
-          "primary-type"?: string;
-          "secondary-types"?: string[];
-        }) =>
-          releaseGroup["primary-type"] === "Album" &&
-          !(releaseGroup["secondary-types"] ?? []).includes("Compilation") &&
-          !(releaseGroup["secondary-types"] ?? []).includes("Live") &&
-          !(releaseGroup["secondary-types"] ?? []).includes("Remix")
+  (releaseGroup: {
+    "primary-type"?: string;
+    "secondary-types"?: string[];
+  }) => {
+    const primaryType = releaseGroup["primary-type"];
+    const secondaryTypes = releaseGroup["secondary-types"] ?? [];
+
+    const excludedTypes = [
+      "Compilation",
+      "DJ-mix",
+      "Live",
+      "Mixtape/Street",
+      "Remix",
+      "Soundtrack",
+      "Spokenword",
+    ];
+
+    return (
+      primaryType === "Album" &&
+      !secondaryTypes.some((type) =>
+        excludedTypes.includes(type)
       )
+    );
+  }
+)
       .map(
         (releaseGroup: {
           id: string;
