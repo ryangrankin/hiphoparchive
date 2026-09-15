@@ -19,9 +19,11 @@ export default function Timeline() {
   const [selectedEra, setSelectedEra] = useState<Era | null>(null);
 
   // Filter timeline events based on selected era
-  const filteredEvents = selectedEra
+  const filteredEvents = (
+  selectedEra
     ? timelineEvents.filter((event) => event.era === selectedEra)
-    : timelineEvents;
+    : timelineEvents
+).sort((a, b) => a.year - b.year);
 
   return (
     <section className="timeline-section">

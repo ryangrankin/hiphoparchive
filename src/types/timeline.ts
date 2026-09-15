@@ -15,6 +15,14 @@ export type Category =
   | "technology"
   | "industry";
 
+export type FoundationTheme =
+  | "diaspora"
+  | "migration"
+  | "musical-traditions"
+  | "politics"
+  | "sound-system"
+  | "bronx";
+
 export type Source = {
   title: string;
   author?: string;
@@ -33,6 +41,8 @@ export type TimelineEvent = {
 
   era: Era;
   category: Category;
+
+  foundationTheme?: FoundationTheme;
 
   themes: string[];
 
