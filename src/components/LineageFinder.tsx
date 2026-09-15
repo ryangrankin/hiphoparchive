@@ -30,6 +30,11 @@ type MusicBrainzAlbum = {
   type: string;
 };
 
+type RelatedArtist = {
+  id: string;
+  name: string;
+};
+
 function normalizeText(text: string) {
   return text
     .toLowerCase()
@@ -374,7 +379,10 @@ export default function LineageFinder() {
   const [selectedConcept, setSelectedConcept] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [albums, setAlbums] = useState<MusicBrainzAlbum[]>([]);
+  const [members, setMembers] = useState<RelatedArtist[]>([]);
+  const [groups, setGroups] = useState<RelatedArtist[]>([]);
   const [isLoadingAlbums, setIsLoadingAlbums] = useState(false);
+  const [isLoadingRelationships, setIsLoadingRelationships] = useState(false);
   const [selectedApiArtist, setSelectedApiArtist] =
   useState<MusicBrainzArtist | null>(null);
   const generatedConnections = selectedApiArtist
@@ -437,6 +445,31 @@ export default function LineageFinder() {
     setIsLoadingAlbums(false);
   }
 }
+
+  async function fetchRelationships(artistId: string) {
+    setIsLoadingRelationships(true);
+    setMembers([]);
+    setGroups([]);
+  
+    try {
+      const response = await fetch(
+        `/api/artists/${artistId}/relationships`
+      );
+  
+      const data = await response.json();
+  
+      setMembers(data.members ?? []);
+      setGroups(data.groups ?? []);
+    } catch (error) {
+      console.error("Relationship lookup failed:", error);
+  
+      setMembers([]);
+      setGroups([]);
+    } finally {
+      setIsLoadingRelationships(false);
+    }
+  }
+
   async function searchArtists() {
   if (!search.trim()) return;
 
@@ -495,7 +528,6 @@ export default function LineageFinder() {
   setSearch(artist.name);
   setApiResults([]);
   setSelectedApiArtist(artist);
-  fetchAlbums(artist.id);
 
   const artistAliases: Record<string, string> = {
   "ms. lauryn hill": "lauryn hill",
@@ -514,6 +546,7 @@ const localArtist = artists.find(
 // Fetch albums for EVERY MusicBrainz artist,
 // including artists that also have a curated local profile.
 fetchAlbums(artist.id);
+fetchRelationships(artist.id);
 
 if (localArtist) {
   setSelectedArtistId(localArtist.id);
@@ -587,6 +620,7 @@ if (localArtist) {
     direct influences or where the artist developed their career.
   </p>
 </header>
+
 <section className="artist-discography">
   <p className="section-label">DISCOGRAPHY</p>
   <h3>Albums</h3>
@@ -609,6 +643,47 @@ if (localArtist) {
     <p>No albums found.</p>
   )}
 </section>
+
+<section className="artist-relationships">
+  <p className="section-label">ARTIST CONNECTIONS</p>
+
+  {isLoadingRelationships ? (
+    <p>Loading artist connections...</p>
+  ) : members.length > 0 || groups.length > 0 ? (
+    <>
+      {members.length > 0 && (
+        <div className="relationship-group">
+          <h3>Members</h3>
+          <div className="relationship-list">
+            {members.map((member) => (
+              <article className="relationship-item" key={member.id}>
+                <span>MEMBER</span>
+                <h4>{member.name}</h4>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {groups.length > 0 && (
+        <div className="relationship-group">
+          <h3>Groups / Projects</h3>
+          <div className="relationship-list">
+            {groups.map((group) => (
+              <article className="relationship-item" key={group.id}>
+                <span>GROUP / PROJECT</span>
+                <h4>{group.name}</h4>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  ) : (
+    <p>No group or member information found.</p>
+  )}
+</section>
+
     <section className="lineage-path">
   <div className="lineage-heading">
     <p className="section-label">YOUR HIP-HOP LINEAGE</p>
@@ -686,6 +761,8 @@ if (localArtist) {
   </div>
 )}
 
+
+
       {/* Results */}
       {selectedArtist && (
         <div className="lineage-result">
@@ -711,6 +788,54 @@ if (localArtist) {
               <span key={theme}>{theme}</span>
             ))}
           </div>
+          {/* Artist relationships */}
+<section className="artist-relationships">
+  <p className="section-label">ARTIST CONNECTIONS</p>
+
+  {isLoadingRelationships ? (
+    <p>Loading artist connections...</p>
+  ) : members.length > 0 || groups.length > 0 ? (
+    <>
+      {members.length > 0 && (
+        <div className="relationship-group">
+          <h3>Members</h3>
+
+          <div className="relationship-list">
+            {members.map((member) => (
+              <article
+                className="relationship-item"
+                key={member.id}
+              >
+                <span>MEMBER</span>
+                <h4>{member.name}</h4>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {groups.length > 0 && (
+        <div className="relationship-group">
+          <h3>Groups / Projects</h3>
+
+          <div className="relationship-list">
+            {groups.map((group) => (
+              <article
+                className="relationship-item"
+                key={group.id}
+              >
+                <span>GROUP / PROJECT</span>
+                <h4>{group.name}</h4>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  ) : (
+    <p>No group or member information found.</p>
+  )}
+</section>
           {/* Discography */}
 <section className="artist-discography">
   <p className="section-label">DISCOGRAPHY</p>
