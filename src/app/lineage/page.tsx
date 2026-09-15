@@ -4,14 +4,14 @@ export default function LineagePage() {
   return (
     <main>
       <header className="lineage-hero">
-        <p className="section-label">PERSONALIZE THE ARCHIVE</p>
+        <p className="section-label">SEARCH THE ARCHIVE</p>
 
-        <h1>Find Your Hip-Hop Lineage</h1>
+        <h1>Find An Artists Hip-Hop Lineage</h1>
 
         <p>
-          Choose an artist you listen to and trace their place through the
+          Choose an artist you listen to and trace their place in the
           people, sounds, regions, technologies, and cultural movements that
-          shaped hip-hop.
+          shaped and changed hip-hop.
         </p>
       </header>
 

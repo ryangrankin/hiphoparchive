@@ -9,10 +9,9 @@ export default function WomenPage() {
         <h1>Women in Hip-Hop</h1>
 
         <p className="women-intro">
-          Women have shaped hip-hop from its earliest parties to its growth as
+          Women have shaped hip-hop from its earliest roots to its growth as
           a global culture. Explore the MCs, organizers, groups, executives,
-          and cultural figures whose contributions are essential to hip-hop
-          history.
+          and cultural figures whose contributions are essential to the hsitory of hip-hop.
         </p>
       </header>
 
@@ -62,6 +61,19 @@ export default function WomenPage() {
             </p>
           </article>
         </div>
+      </section>
+
+      <section>
+        <header>
+            <h1> HIP HOP FEMINISM </h1>
+
+            <p className="hip-hop-feminism-intro">
+                Women's role in hip hop has not simply been passive. 
+                Female artists have shaped both hip hop culture and broader American culture, 
+                and solidified women's importance and place in hip hop.
+            </p>
+        </header>
+
       </section>
 
       <WomenTimeline />

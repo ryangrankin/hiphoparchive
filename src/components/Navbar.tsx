@@ -5,7 +5,7 @@ export default function Navbar() {
     <div className="nav-links">
   <Link href="/">History</Link>
   <Link href="/women">Women in Hip-Hop</Link>
-  <Link href="/lineage">Find Your Lineage</Link>
+  <Link href="/lineage">Trace Artists Musical Lineage</Link>
 </div>
   );
 }

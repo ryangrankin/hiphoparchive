@@ -18,7 +18,7 @@ export default function WomenTimeline() {
 
         <p className="timeline-intro">
           Follow women's contributions to hip-hop across its history and
-          explore how their work shaped the culture.
+          explore how their work shaped the culture of hip hop.
         </p>
       </div>
 
@@ -59,7 +59,7 @@ export default function WomenTimeline() {
                     <div className="timeline-details">
                       <p>{event.description}</p>
 
-                      <h4>Why It Matters</h4>
+                      <h4>Whats the Significance?</h4>
                       <p>{event.significance}</p>
 
                       {event.artists && event.artists.length > 0 && (

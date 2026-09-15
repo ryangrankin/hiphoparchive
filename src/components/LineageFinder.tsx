@@ -74,6 +74,7 @@ function getRegionFromLocation(location: string) {
     "queens",
     "harlem",
     "philadelphia",
+    "staten island"
   ];
 
   if (southernLocations.some((place) => normalized.includes(place))) {
@@ -617,7 +618,8 @@ if (localArtist) {
   <p className="snapshot-note">
     Location and style metadata are used as clues for exploring the
     artist's historical context. They do not necessarily represent
-    direct influences or where the artist developed their career.
+    direct influences or where the artist developed their career. 
+    Location and album information is directly from the MusicBrainz database.
   </p>
 </header>
 
@@ -686,7 +688,7 @@ if (localArtist) {
 
     <section className="lineage-path">
   <div className="lineage-heading">
-    <p className="section-label">YOUR HIP-HOP LINEAGE</p>
+    <p className="section-label">ARTISTS HIP-HOP LINEAGE</p>
 
     <h3>
       Where {selectedApiArtist.name} Fits in Hip-Hop History
