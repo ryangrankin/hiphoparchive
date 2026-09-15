@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { artists } from "@/data/artists";
 import { timelineEvents } from "@/data/timeline";
+import { lineageConcepts } from "@/data/lineageConcepts";
 
 type MusicBrainzArtist = {
   id: string;
@@ -29,13 +30,183 @@ function normalizeText(text: string) {
     .trim();
 }
 
-function getGeneratedConnections(
+function getRegionFromLocation(location: string) {
+  const normalized = normalizeText(location);
+
+  const southernLocations = [
+    "tampa",
+    "florida",
+    "atlanta",
+    "georgia",
+    "miami",
+    "new orleans",
+    "louisiana",
+    "houston",
+    "texas",
+    "memphis",
+    "tennessee",
+  ];
+
+  const westCoastLocations = [
+    "compton",
+    "los angeles",
+    "california",
+    "oakland",
+    "san francisco",
+  ];
+
+  const eastCoastLocations = [
+    "new york",
+    "bronx",
+    "brooklyn",
+    "queens",
+    "harlem",
+    "philadelphia",
+  ];
+
+  if (southernLocations.some((place) => normalized.includes(place))) {
+    return "south";
+  }
+
+  if (westCoastLocations.some((place) => normalized.includes(place))) {
+    return "west coast";
+  }
+
+  if (eastCoastLocations.some((place) => normalized.includes(place))) {
+    return "east coast";
+  }
+
+  return null;
+}
+
+function getGeneratedLineage(artist: MusicBrainzArtist) {
+  const tags = (artist.tags ?? [])
+    .filter((tag) => tag.count > 0)
+    .map((tag) => normalizeText(tag.name));
+  const specificHipHopTags = tags.filter(
+  (tag) =>
+    !["rap", "hip hop", "hiphop", "pop", "music"].includes(tag)
+);
+
+  const location =
+    artist["begin-area"]?.name ||
+    artist.area?.name ||
+    artist.country ||
+    "";
+
+  const region = getRegionFromLocation(location);
+
+  const lineage: string[] = [
+    "African American Musical Traditions",
+  ];
+
+  // Musical traditions
+  if (tags.includes("jazz") || tags.includes("jazz rap")) {
+    lineage.push("Jazz and Black Musical Experimentation");
+  }
+
+  if (tags.includes("funk")) {
+    lineage.push("Funk and Break-Based Music");
+  }
+
+  if (tags.includes("soul") || tags.includes("r&b")) {
+    lineage.push("Soul and R&B");
+  }
+
+  // Regional histories
+  if (region === "south") {
+    lineage.push("Southern Hip-Hop");
+  }
+
+  if (region === "west coast") {
+    lineage.push("West Coast Hip-Hop");
+  }
+
+  if (region === "east coast") {
+    lineage.push("East Coast Hip-Hop");
+  }
+
+  // Specific styles
+  if (tags.includes("conscious hip hop")) {
+    lineage.push("Conscious and Political Hip-Hop");
+  }
+
+  if (
+    tags.includes("alternative hip hop") ||
+    tags.includes("experimental hip hop")
+  ) {
+    lineage.push("Alternative and Experimental Hip-Hop");
+  }
+
+  if (tags.includes("gangsta rap")) {
+    lineage.push("Gangsta Rap");
+  }
+
+  if (tags.includes("trap")) {
+    lineage.push("Trap");
+  }
+
+  if (tags.includes("drill")) {
+    lineage.push("Drill");
+  }
+
+// If MusicBrainz only provides generic metadata,
+// give the artist a broad historical hip-hop pathway
+// rather than inventing specific influences.
+if (lineage.length === 1 && specificHipHopTags.length === 0) {
+  lineage.push("The Birth of Hip-Hop");
+  lineage.push("Hip-Hop Expands Beyond the Bronx");
+}
+
+  lineage.push(artist.name);
+
+  return [...new Set(lineage)];
+}
+
+function getLineageConcept(name: string) {
+  return lineageConcepts.find(
+    (concept) =>
+      normalizeText(concept.name) === normalizeText(name)
+  );
+}
+
+ function getGeneratedConnections(
   artist: MusicBrainzArtist,
   limit = 6
 ) {
+  const ignoredTags = new Set([
+    "rap",
+    "hip hop",
+    "hiphop",
+    "pop",
+    "music",
+  ]);
+
+  const importantTagWeights: Record<string, number> = {
+    "southern hip hop": 8,
+    "west coast hip hop": 8,
+    "east coast hip hop": 8,
+    "conscious hip hop": 7,
+    "political hip hop": 7,
+    "alternative hip hop": 7,
+    "experimental hip hop": 7,
+    "jazz rap": 6,
+    "gangsta rap": 6,
+    "hardcore hip hop": 5,
+    "pop rap": 4,
+    "trap": 6,
+    "drill": 6,
+    "boom bap": 6,
+    "r&b": 3,
+    "funk": 4,
+    "jazz": 4,
+    "soul": 4,
+  };
+
   const artistTags = (artist.tags ?? [])
     .filter((tag) => tag.count > 0)
-    .map((tag) => normalizeText(tag.name));
+    .map((tag) => normalizeText(tag.name))
+    .filter((tag) => !ignoredTags.has(tag));
 
   const artistLocation = normalizeText(
     artist["begin-area"]?.name ||
@@ -43,6 +214,7 @@ function getGeneratedConnections(
       artist.country ||
       ""
   );
+  const artistRegion = getRegionFromLocation(artistLocation);
 
   const scoredEvents = timelineEvents.map((event) => {
     let score = 0;
@@ -53,32 +225,96 @@ function getGeneratedConnections(
     );
 
     const eventLocation = normalizeText(event.location ?? "");
+    const eventText = normalizeText(
+  [
+    event.title,
+    event.description,
+    event.significance,
+    event.location ?? "",
+    ...event.themes,
+  ].join(" ")
+);
 
-    // Compare MusicBrainz tags with our historical themes.
     artistTags.forEach((tag) => {
       eventThemes.forEach((theme) => {
+        const weight = importantTagWeights[tag] ?? 2;
+
         if (tag === theme) {
-          score += 4;
+          score += weight;
           reasons.push(tag);
         } else if (
-          tag.includes(theme) ||
-          theme.includes(tag)
+          tag.length > 4 &&
+          theme.length > 4 &&
+          (tag.includes(theme) || theme.includes(tag))
         ) {
-          score += 2;
+          score += Math.max(2, Math.floor(weight / 2));
           reasons.push(tag);
         }
       });
     });
 
-    // Compare artist location with event location.
+    // Strong regional connection
     if (
       artistLocation &&
       eventLocation &&
       (eventLocation.includes(artistLocation) ||
         artistLocation.includes(eventLocation))
     ) {
-      score += 3;
+      score += 10;
       reasons.push("regional connection");
+    }
+    // Connect cities to broader hip-hop regions.
+if (artistRegion) {
+  if (
+    artistRegion === "south" &&
+    (
+      eventText.includes("southern") ||
+      eventText.includes("south") ||
+      eventText.includes("atlanta") ||
+      eventText.includes("trap") ||
+      eventText.includes("new orleans")
+    )
+  ) {
+    score += 7;
+    reasons.push("Southern hip-hop");
+  }
+
+  if (
+    artistRegion === "west coast" &&
+    (
+      eventText.includes("west coast") ||
+      eventText.includes("los angeles") ||
+      eventText.includes("compton") ||
+      eventText.includes("california")
+    )
+  ) {
+    score += 7;
+    reasons.push("West Coast hip-hop");
+  }
+
+  if (
+    artistRegion === "east coast" &&
+    (
+      eventText.includes("east coast") ||
+      eventText.includes("new york") ||
+      eventText.includes("bronx") ||
+      eventText.includes("brooklyn")
+    )
+  ) {
+    score += 7;
+    reasons.push("East Coast hip-hop");
+  }
+}
+
+    // Direct artist match should always be extremely important.
+    const directArtistMatch = event.artists?.some(
+      (eventArtist) =>
+        normalizeText(eventArtist) === normalizeText(artist.name)
+    );
+
+    if (directArtistMatch) {
+      score += 20;
+      reasons.push("artist history");
     }
 
     return {
@@ -90,10 +326,16 @@ function getGeneratedConnections(
 
   return scoredEvents
     .filter((result) => result.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit);
-}
+    .sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
 
+      return a.event.year - b.event.year;
+    })
+    .slice(0, limit)
+    .sort((a, b) => a.event.year - b.event.year);
+}
 export default function LineageFinder() {
   const [selectedArtistId, setSelectedArtistId] = useState("");
   const [search, setSearch] = useState("");
@@ -103,6 +345,9 @@ export default function LineageFinder() {
   useState<MusicBrainzArtist | null>(null);
   const generatedConnections = selectedApiArtist
   ? getGeneratedConnections(selectedApiArtist)
+  : [];
+  const generatedLineage = selectedApiArtist
+  ? getGeneratedLineage(selectedApiArtist)
   : [];
 
   const selectedArtist = artists.find(
@@ -233,6 +478,56 @@ export default function LineageFinder() {
           </div>
         )}
     </header>
+    <section className="lineage-path">
+  <div className="lineage-heading">
+    <p className="section-label">YOUR HIP-HOP LINEAGE</p>
+
+    <h3>
+      Where {selectedApiArtist.name} Fits in Hip-Hop History
+    </h3>
+
+    <p className="generated-explanation">
+      This path places the artist within broader musical, regional,
+      and stylistic traditions represented in the archive. These are
+      historical connections, not necessarily direct influences.
+    </p>
+  </div>
+
+  <div className="lineage-steps">
+    {generatedLineage.map((step, index) => {
+      const isLast = index === generatedLineage.length - 1;
+      const concept = getLineageConcept(step);
+
+      return (
+        <div
+          className={`lineage-step ${
+            isLast ? "current-artist" : ""
+          }`}
+          key={step}
+        >
+          <div className="lineage-node">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+          </div>
+
+          <div className="lineage-step-content">
+            <p>
+              {isLast
+                ? "YOUR ARTIST"
+                : "HISTORICAL CONNECTION"}
+            </p>
+
+            <h4>{step}</h4>
+            {concept && (
+  <p className="lineage-description">
+    {concept.description}
+  </p>
+)}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>
     <section className="lineage-events generated-lineage">
   <p className="section-label">GENERATED FROM THE ARCHIVE</p>
 
