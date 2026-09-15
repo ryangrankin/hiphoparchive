@@ -79,6 +79,30 @@ function getRegionFromLocation(location: string) {
   return null;
 }
 
+function getArtistContext(artist: MusicBrainzArtist) {
+  const location =
+    artist["begin-area"]?.name ||
+    artist.area?.name ||
+    artist.country ||
+    "";
+
+  const region = getRegionFromLocation(location);
+
+  if (region === "south") {
+    return "Southern Hip-Hop";
+  }
+
+  if (region === "west coast") {
+    return "West Coast Hip-Hop";
+  }
+
+  if (region === "east coast") {
+    return "East Coast Hip-Hop";
+  }
+
+  return "Broader Hip-Hop Tradition";
+}
+
 function getGeneratedLineage(artist: MusicBrainzArtist) {
   const tags = (artist.tags ?? [])
     .filter((tag) => tag.count > 0)
@@ -340,6 +364,7 @@ export default function LineageFinder() {
   const [selectedArtistId, setSelectedArtistId] = useState("");
   const [search, setSearch] = useState("");
   const [apiResults, setApiResults] = useState<MusicBrainzArtist[]>([]);
+  const [selectedConcept, setSelectedConcept] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedApiArtist, setSelectedApiArtist] =
   useState<MusicBrainzArtist | null>(null);
@@ -348,6 +373,35 @@ export default function LineageFinder() {
   : [];
   const generatedLineage = selectedApiArtist
   ? getGeneratedLineage(selectedApiArtist)
+  : [];
+  const artistContext = selectedApiArtist
+  ? getArtistContext(selectedApiArtist)
+  : "";
+  const selectedConceptData = selectedConcept
+  ? lineageConcepts.find(
+      (concept) => concept.name === selectedConcept
+    )
+  : null;
+  const conceptEvents = selectedConceptData
+  ? timelineEvents
+      .filter((event) => {
+        const eventText = normalizeText(
+          [
+            event.title,
+            event.description,
+            event.significance,
+            event.location ?? "",
+            ...event.themes,
+          ].join(" ")
+        );
+
+        return selectedConceptData.relatedThemes.some((theme) =>
+          eventText.includes(normalizeText(theme))
+        );
+      })
+      .slice()
+      .sort((a, b) => a.year - b.year)
+      .slice(0, 6)
   : [];
 
   const selectedArtist = artists.find(
@@ -454,30 +508,51 @@ export default function LineageFinder() {
 
 {selectedApiArtist && !selectedArtist && (
   <div className="lineage-result">
-    <header className="artist-header">
-      <p className="section-label">YOUR ARTIST</p>
+    <header className="artist-header artist-snapshot">
+  <p className="section-label">ARTIST SNAPSHOT</p>
 
-      <h2>{selectedApiArtist.name}</h2>
+  <h2>{selectedApiArtist.name}</h2>
 
-      <p className="artist-location">
+  <div className="snapshot-details">
+    <div>
+      <span>API LOCATION</span>
+
+      <p>
         {selectedApiArtist["begin-area"]?.name ||
           selectedApiArtist.area?.name ||
           selectedApiArtist.country ||
-          "Location unknown"}
+          "Unknown"}
       </p>
+    </div>
 
-      {selectedApiArtist.tags &&
-        selectedApiArtist.tags.length > 0 && (
-          <div className="artist-themes">
-            {selectedApiArtist.tags
-              .filter((tag) => tag.count > 0)
-              .slice(0, 8)
-              .map((tag) => (
-                <span key={tag.name}>{tag.name}</span>
-              ))}
-          </div>
-        )}
-    </header>
+    <div>
+      <span>HISTORICAL CONTEXT</span>
+      <p>{artistContext}</p>
+    </div>
+  </div>
+
+  {selectedApiArtist.tags &&
+    selectedApiArtist.tags.length > 0 && (
+      <div className="snapshot-styles">
+        <span>STYLES & TAGS</span>
+
+        <div className="artist-themes">
+          {selectedApiArtist.tags
+            .filter((tag) => tag.count > 0)
+            .slice(0, 8)
+            .map((tag) => (
+              <span key={tag.name}>{tag.name}</span>
+            ))}
+        </div>
+      </div>
+    )}
+
+  <p className="snapshot-note">
+    Location and style metadata are used as clues for exploring the
+    artist's historical context. They do not necessarily represent
+    direct influences or where the artist developed their career.
+  </p>
+</header>
     <section className="lineage-path">
   <div className="lineage-heading">
     <p className="section-label">YOUR HIP-HOP LINEAGE</p>
@@ -517,7 +592,31 @@ export default function LineageFinder() {
             </p>
 
             <h4>{step}</h4>
-            {concept && (
+            {concept ? (
+  <button
+    type="button"
+    className="lineage-concept-button"
+    onClick={() =>
+      setSelectedConcept(
+        selectedConcept === concept.name
+          ? null
+          : concept.name
+      )
+    }
+  >
+    <h4>{step}</h4>
+
+    <span>
+      {selectedConcept === concept.name
+        ? "CLOSE ARCHIVE"
+        : "EXPLORE IN ARCHIVE →"}
+    </span>
+  </button>
+) : (
+  <h4>{step}</h4>
+)}
+
+{concept && (
   <p className="lineage-description">
     {concept.description}
   </p>
@@ -528,6 +627,38 @@ export default function LineageFinder() {
     })}
   </div>
 </section>
+{selectedConceptData && (
+  <section className="concept-archive">
+    <div className="concept-archive-header">
+      <p className="section-label">FROM THE ARCHIVE</p>
+
+      <h3>{selectedConceptData.name}</h3>
+
+      <p>{selectedConceptData.description}</p>
+    </div>
+
+    {conceptEvents.length > 0 ? (
+      <div className="connected-events">
+        {conceptEvents.map((event) => (
+          <article key={event.id}>
+            <span>
+              {event.year}
+              {event.endYear && `–${event.endYear}`}
+            </span>
+
+            <h4>{event.title}</h4>
+
+            <p>{event.significance}</p>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p>
+        No archive events are currently connected to this concept.
+      </p>
+    )}
+  </section>
+)}
     <section className="lineage-events generated-lineage">
   <p className="section-label">GENERATED FROM THE ARCHIVE</p>
 
