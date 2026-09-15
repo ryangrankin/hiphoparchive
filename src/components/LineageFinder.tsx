@@ -1,0 +1,365 @@
+"use client";
+
+import { useState } from "react";
+import { artists } from "@/data/artists";
+import { timelineEvents } from "@/data/timeline";
+
+type MusicBrainzArtist = {
+  id: string;
+  name: string;
+  country?: string;
+  score?: number;
+  disambiguation?: string;
+  area?: {
+    name: string;
+  };
+  "begin-area"?: {
+    name: string;
+  };
+  tags?: {
+    name: string;
+    count: number;
+  }[];
+};
+
+function normalizeText(text: string) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .trim();
+}
+
+function getGeneratedConnections(
+  artist: MusicBrainzArtist,
+  limit = 6
+) {
+  const artistTags = (artist.tags ?? [])
+    .filter((tag) => tag.count > 0)
+    .map((tag) => normalizeText(tag.name));
+
+  const artistLocation = normalizeText(
+    artist["begin-area"]?.name ||
+      artist.area?.name ||
+      artist.country ||
+      ""
+  );
+
+  const scoredEvents = timelineEvents.map((event) => {
+    let score = 0;
+    const reasons: string[] = [];
+
+    const eventThemes = event.themes.map((theme) =>
+      normalizeText(theme)
+    );
+
+    const eventLocation = normalizeText(event.location ?? "");
+
+    // Compare MusicBrainz tags with our historical themes.
+    artistTags.forEach((tag) => {
+      eventThemes.forEach((theme) => {
+        if (tag === theme) {
+          score += 4;
+          reasons.push(tag);
+        } else if (
+          tag.includes(theme) ||
+          theme.includes(tag)
+        ) {
+          score += 2;
+          reasons.push(tag);
+        }
+      });
+    });
+
+    // Compare artist location with event location.
+    if (
+      artistLocation &&
+      eventLocation &&
+      (eventLocation.includes(artistLocation) ||
+        artistLocation.includes(eventLocation))
+    ) {
+      score += 3;
+      reasons.push("regional connection");
+    }
+
+    return {
+      event,
+      score,
+      reasons: [...new Set(reasons)],
+    };
+  });
+
+  return scoredEvents
+    .filter((result) => result.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit);
+}
+
+export default function LineageFinder() {
+  const [selectedArtistId, setSelectedArtistId] = useState("");
+  const [search, setSearch] = useState("");
+  const [apiResults, setApiResults] = useState<MusicBrainzArtist[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedApiArtist, setSelectedApiArtist] =
+  useState<MusicBrainzArtist | null>(null);
+  const generatedConnections = selectedApiArtist
+  ? getGeneratedConnections(selectedApiArtist)
+  : [];
+
+  const selectedArtist = artists.find(
+    (artist) => artist.id === selectedArtistId
+  );
+  const searchResults = artists.filter((artist) =>
+    artist.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const relatedEvents = selectedArtist
+    ? selectedArtist.relatedTimelineEvents
+        .map((id) => timelineEvents.find((event) => event.id === id))
+        .filter((event) => event !== undefined)
+    : [];
+
+  async function searchArtists() {
+  if (!search.trim()) return;
+
+  setIsSearching(true);
+
+  try {
+    const response = await fetch(
+      `/api/artists?q=${encodeURIComponent(search)}`
+    );
+
+    const data = await response.json();
+
+    setApiResults(data.artists ?? []);
+  } catch (error) {
+    console.error("Artist search failed:", error);
+    setApiResults([]);
+  } finally {
+    setIsSearching(false);
+  }
+}
+
+  return (
+    <section className="lineage-finder">
+      {/* Artist selector */}
+      <div className="artist-search">
+  <label htmlFor="artist-search">Search for an artist</label>
+
+  <div className="search-input-wrapper">
+    <input
+      id="artist-search"
+      type="text"
+      placeholder="Try Kendrick Lamar..."
+      value={search}
+      autoComplete="off"
+      onChange={(event) => {
+        setSearch(event.target.value);
+        setSelectedArtistId("");
+      }}
+    />
+    <button
+  type="button"
+  className="artist-search-button"
+  onClick={searchArtists}
+  disabled={isSearching}
+>
+  {isSearching ? "Searching..." : "Search"}
+</button>
+
+    {apiResults.length > 0 && (
+  <div className="search-results">
+    {apiResults.map((artist) => (
+      <button
+        type="button"
+        key={artist.id}
+        onClick={() => {
+  setSearch(artist.name);
+  setApiResults([]);
+  setSelectedApiArtist(artist);
+
+  const localArtist = artists.find(
+    (local) =>
+      local.name.toLowerCase() === artist.name.toLowerCase()
+  );
+
+  if (localArtist) {
+    setSelectedArtistId(localArtist.id);
+  } else {
+    setSelectedArtistId("");
+  }
+}}
+      >
+        <span>{artist.name}</span>
+
+        <small>
+          {artist["begin-area"]?.name ||
+            artist.area?.name ||
+            artist.country ||
+            "Location unknown"}
+
+          {artist.disambiguation &&
+            ` · ${artist.disambiguation}`}
+        </small>
+      </button>
+    ))}
+  </div>
+)}
+  </div>
+</div>
+
+{selectedApiArtist && !selectedArtist && (
+  <div className="lineage-result">
+    <header className="artist-header">
+      <p className="section-label">YOUR ARTIST</p>
+
+      <h2>{selectedApiArtist.name}</h2>
+
+      <p className="artist-location">
+        {selectedApiArtist["begin-area"]?.name ||
+          selectedApiArtist.area?.name ||
+          selectedApiArtist.country ||
+          "Location unknown"}
+      </p>
+
+      {selectedApiArtist.tags &&
+        selectedApiArtist.tags.length > 0 && (
+          <div className="artist-themes">
+            {selectedApiArtist.tags
+              .filter((tag) => tag.count > 0)
+              .slice(0, 8)
+              .map((tag) => (
+                <span key={tag.name}>{tag.name}</span>
+              ))}
+          </div>
+        )}
+    </header>
+    <section className="lineage-events generated-lineage">
+  <p className="section-label">GENERATED FROM THE ARCHIVE</p>
+
+  <h3>
+    How {selectedApiArtist.name} Connects to Hip-Hop History
+  </h3>
+
+  <p className="generated-explanation">
+    These connections are generated by comparing the artist's musical
+    metadata with themes and regions represented in the Hip-Hop Archive.
+  </p>
+
+  {generatedConnections.length > 0 ? (
+    <div className="connected-events">
+      {generatedConnections.map(({ event, reasons }) => (
+        <article key={event.id}>
+          <span>
+            {event.year}
+            {event.endYear && `–${event.endYear}`}
+          </span>
+
+          <h4>{event.title}</h4>
+
+          <p>{event.significance}</p>
+
+          {reasons.length > 0 && (
+            <div className="connection-reasons">
+              <strong>Connected through:</strong>
+
+              <div>
+                {reasons.map((reason) => (
+                  <span key={reason}>{reason}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  ) : (
+    <p>
+      We don't have enough matching information to generate a lineage
+      for this artist yet.
+    </p>
+  )}
+</section>
+  </div>
+)}
+
+      {/* Results */}
+      {selectedArtist && (
+        <div className="lineage-result">
+          {/* Artist information */}
+          <header className="artist-header">
+            <p className="section-label">YOUR ARTIST</p>
+
+            <h2>{selectedArtist.name}</h2>
+
+            <p className="artist-location">
+              {selectedArtist.region} · {selectedArtist.location} ·{" "}
+              {selectedArtist.era}
+            </p>
+
+            <p className="artist-description">
+              {selectedArtist.description}
+            </p>
+          </header>
+
+          {/* Themes */}
+          <div className="artist-themes">
+            {selectedArtist.themes.map((theme) => (
+              <span key={theme}>{theme}</span>
+            ))}
+          </div>
+
+          {/* Lineage */}
+            <section className="lineage-path">
+  <div className="lineage-heading">
+    <p className="section-label">YOUR HIP-HOP LINEAGE</p>
+    <h3>
+      How {selectedArtist.name} connects to hip-hop history.
+    </h3>
+  </div>
+
+  <div className="lineage-steps">
+    {selectedArtist.lineage.map((step, index) => {
+      const isLast = index === selectedArtist.lineage.length - 1;
+
+      return (
+        <div
+          className={`lineage-step ${isLast ? "current-artist" : ""}`}
+          key={step}
+        >
+          <div className="lineage-node">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+          </div>
+
+          <div className="lineage-step-content">
+            <p>{isLast ? "YOUR ARTIST" : "INFLUENCE"}</p>
+            <h4>{step}</h4>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+          {/* Related timeline events */}
+          <section className="lineage-events">
+            <p className="section-label">EXPLORE THE HISTORY</p>
+
+            <h3>Connected Moments in the Archive</h3>
+
+            <div className="connected-events">
+              {relatedEvents.map((event) => (
+                <article key={event.id}>
+                  <span>{event.year}</span>
+
+                  <h4>{event.title}</h4>
+
+                  <p>{event.significance}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
+    </section>
+  );
+}

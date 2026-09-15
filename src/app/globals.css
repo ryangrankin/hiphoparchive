@@ -375,3 +375,383 @@ main > h1 + p {
     text-align: right;
   }
 }
+
+/* -------------------------
+   HIP-HOP LINEAGE
+------------------------- */
+
+.lineage-hero {
+  max-width: 900px;
+  margin-bottom: 100px;
+}
+
+.lineage-hero h1 {
+  margin: 10px 0 30px;
+  font-size: clamp(3.5rem, 9vw, 7.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+}
+
+.lineage-hero > p:last-child {
+  max-width: 650px;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.artist-selector {
+  border-top: 2px solid #171717;
+  border-bottom: 2px solid #171717;
+  padding: 30px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.artist-selector label {
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.artist-selector select {
+  width: min(450px, 100%);
+  background: transparent;
+  color: #171717;
+  border: 1px solid #171717;
+  padding: 15px;
+  font-size: 1rem;
+}
+
+.lineage-result {
+  margin-top: 90px;
+}
+
+.artist-header {
+  max-width: 800px;
+}
+
+.artist-header h2 {
+  margin: 10px 0 15px;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+.artist-location {
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.artist-description {
+  max-width: 650px;
+  margin-top: 30px;
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.artist-themes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 30px;
+}
+
+.artist-themes span {
+  border: 1px solid #171717;
+  padding: 7px 11px;
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* LINEAGE VISUALIZATION */
+
+.lineage-path {
+  margin-top: 120px;
+  border-top: 2px solid #171717;
+  padding-top: 35px;
+}
+
+.lineage-heading {
+  margin-bottom: 60px;
+}
+
+.lineage-heading h3 {
+  max-width: 650px;
+  margin: 10px 0 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.lineage-steps {
+  position: relative;
+  max-width: 800px;
+}
+
+/* vertical connecting line */
+.lineage-steps::before {
+  content: "";
+  position: absolute;
+  left: 29px;
+  top: 30px;
+  bottom: 30px;
+  width: 2px;
+  background: #171717;
+}
+
+.lineage-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 30px;
+  align-items: center;
+  min-height: 120px;
+}
+
+.lineage-node {
+  position: relative;
+  z-index: 1;
+  width: 60px;
+  height: 60px;
+  border: 2px solid #171717;
+  border-radius: 50%;
+  background: #f4f0e8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lineage-node span {
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+.lineage-step-content {
+  border-bottom: 1px solid #aaa;
+  padding: 25px 0;
+}
+
+.lineage-step-content p {
+  margin: 0 0 6px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+}
+
+.lineage-step-content h4 {
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  letter-spacing: -0.03em;
+}
+
+/* final node = selected artist */
+
+.lineage-step.current-artist .lineage-node {
+  background: #171717;
+  color: #f4f0e8;
+}
+
+.lineage-step.current-artist .lineage-step-content h4 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+/* CONNECTED ARCHIVE EVENTS */
+
+.lineage-events {
+  margin-top: 120px;
+  border-top: 2px solid #171717;
+  padding-top: 35px;
+}
+
+.lineage-events > h3 {
+  margin: 10px 0 50px;
+  font-size: clamp(2rem, 5vw, 4rem);
+  letter-spacing: -0.04em;
+}
+
+.connected-events {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid #171717;
+}
+
+.connected-events article {
+  padding: 30px;
+  border-bottom: 1px solid #171717;
+}
+
+.connected-events article:nth-child(odd) {
+  border-right: 1px solid #171717;
+}
+
+.connected-events article > span {
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.connected-events h4 {
+  margin: 12px 0;
+  font-size: 1.4rem;
+}
+
+.connected-events p {
+  line-height: 1.6;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .artist-selector {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .connected-events {
+    grid-template-columns: 1fr;
+  }
+
+  .connected-events article:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .lineage-step {
+    gap: 18px;
+  }
+}
+/* ARTIST SEARCH */
+
+.artist-search {
+  position: relative;
+  border-top: 2px solid #171717;
+  border-bottom: 2px solid #171717;
+  padding: 30px 0;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.artist-search > label {
+  padding-top: 17px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.search-input-wrapper {
+  position: relative;
+  max-width: 600px;
+}
+
+.search-input-wrapper input {
+  width: 100%;
+  border: 1px solid #171717;
+  background: transparent;
+  color: #171717;
+  padding: 16px 18px;
+  font-size: 1.1rem;
+  outline: none;
+}
+
+.search-input-wrapper input:focus {
+  border-width: 2px;
+}
+
+.search-results {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background: #f4f0e8;
+  border: 1px solid #171717;
+}
+
+.search-results button {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid #aaa;
+  background: transparent;
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-results button:last-child {
+  border-bottom: 0;
+}
+
+.search-results button:hover {
+  background: #171717;
+  color: #f4f0e8;
+}
+
+.search-results button span {
+  font-weight: bold;
+}
+
+.search-results button small {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.no-results {
+  margin: 0;
+  padding: 18px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  .artist-search {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .artist-search > label {
+    padding-top: 0;
+  }
+}
+
+.generated-explanation {
+  max-width: 650px;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.connection-reasons {
+  margin-top: 25px;
+}
+
+.connection-reasons strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.connection-reasons div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.connection-reasons span {
+  border: 1px solid #999;
+  padding: 5px 8px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
