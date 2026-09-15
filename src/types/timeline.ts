@@ -31,25 +31,18 @@ export type Source = {
 
 export type TimelineEvent = {
   id: string;
-
   year: number;
   endYear?: number;
-
   title: string;
   description: string;
   significance: string;
-
   era: Era;
   category: Category;
-
   foundationTheme?: FoundationTheme;
-
   themes: string[];
-
   location?: string;
   artists?: string[];
-
   womenInHipHop?: boolean;
-
+  lineageConcepts?: string[];
   sources: Source[];
 };

@@ -209,4 +209,35 @@ export const lineageConcepts: LineageConcept[] = [
     "national expansion",
   ],
 },
+
+{
+  id: "caribbean-diasporic-traditions",
+  name: "Caribbean and Diasporic Musical Traditions",
+  description:
+    "Hip-hop developed within a wider Black diasporic cultural world shaped by movement, exchange, and adaptation across the Caribbean and the United States. Jamaican sound-system culture is especially important to early hip-hop history, while later artists have continued to draw connections across reggae, dancehall, hip-hop, R&B, and other diasporic musical traditions.",
+  relatedThemes: [
+    "diaspora",
+    "Caribbean",
+    "Jamaica",
+    "sound system",
+    "reggae",
+    "dancehall",
+  ],
+  relatedTimelineEvents: [],
+},
+
+{
+  id: "women-in-hip-hop",
+  name: "Women in Hip-Hop",
+  description:
+    "Women have participated in hip-hop as organizers, MCs, DJs, performers, producers, executives, and cultural innovators from its earliest years. Their history challenges narratives that treat women rappers as later additions to a culture created exclusively by men.",
+  relatedThemes: [
+    "women in hip hop",
+    "Black women",
+    "gender",
+    "hip-hop feminism",
+    "women rappers",
+  ],
+  relatedTimelineEvents: [],
+},
 ];

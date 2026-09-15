@@ -23,6 +23,13 @@ type MusicBrainzArtist = {
   }[];
 };
 
+type MusicBrainzAlbum = {
+  id: string;
+  title: string;
+  date: string;
+  type: string;
+};
+
 function normalizeText(text: string) {
   return text
     .toLowerCase()
@@ -366,6 +373,8 @@ export default function LineageFinder() {
   const [apiResults, setApiResults] = useState<MusicBrainzArtist[]>([]);
   const [selectedConcept, setSelectedConcept] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [albums, setAlbums] = useState<MusicBrainzAlbum[]>([]);
+  const [isLoadingAlbums, setIsLoadingAlbums] = useState(false);
   const [selectedApiArtist, setSelectedApiArtist] =
   useState<MusicBrainzArtist | null>(null);
   const generatedConnections = selectedApiArtist
@@ -382,26 +391,17 @@ export default function LineageFinder() {
       (concept) => concept.name === selectedConcept
     )
   : null;
+  
   const conceptEvents = selectedConceptData
-  ? timelineEvents
-      .filter((event) => {
-        const eventText = normalizeText(
-          [
-            event.title,
-            event.description,
-            event.significance,
-            event.location ?? "",
-            ...event.themes,
-          ].join(" ")
-        );
-
-        return selectedConceptData.relatedThemes.some((theme) =>
-          eventText.includes(normalizeText(theme))
-        );
-      })
-      .slice()
-      .sort((a, b) => a.year - b.year)
-      .slice(0, 6)
+  ? Array.from(
+      new Map(
+        timelineEvents
+          .filter((event) =>
+            event.lineageConcepts?.includes(selectedConceptData.id)
+          )
+          .map((event) => [event.id, event])
+      ).values()
+    ).sort((a, b) => a.year - b.year)
   : [];
 
   const selectedArtist = artists.find(
@@ -417,6 +417,26 @@ export default function LineageFinder() {
         .filter((event) => event !== undefined)
     : [];
 
+
+    async function fetchAlbums(artistId: string) {
+  setIsLoadingAlbums(true);
+  setAlbums([]);
+
+  try {
+    const response = await fetch(
+      `/api/artists/${artistId}/albums`
+    );
+
+    const data = await response.json();
+
+    setAlbums(data.albums ?? []);
+  } catch (error) {
+    console.error("Album lookup failed:", error);
+    setAlbums([]);
+  } finally {
+    setIsLoadingAlbums(false);
+  }
+}
   async function searchArtists() {
   if (!search.trim()) return;
 
@@ -475,17 +495,31 @@ export default function LineageFinder() {
   setSearch(artist.name);
   setApiResults([]);
   setSelectedApiArtist(artist);
+  fetchAlbums(artist.id);
 
-  const localArtist = artists.find(
-    (local) =>
-      local.name.toLowerCase() === artist.name.toLowerCase()
-  );
+  const artistAliases: Record<string, string> = {
+  "ms. lauryn hill": "lauryn hill",
+};
 
-  if (localArtist) {
-    setSelectedArtistId(localArtist.id);
-  } else {
-    setSelectedArtistId("");
-  }
+const searchedName = artist.name.toLowerCase();
+
+const normalizedArtistName =
+  artistAliases[searchedName] ?? searchedName;
+
+const localArtist = artists.find(
+  (local) =>
+    local.name.toLowerCase() === normalizedArtistName
+);
+
+// Fetch albums for EVERY MusicBrainz artist,
+// including artists that also have a curated local profile.
+fetchAlbums(artist.id);
+
+if (localArtist) {
+  setSelectedArtistId(localArtist.id);
+} else {
+  setSelectedArtistId("");
+}
 }}
       >
         <span>{artist.name}</span>
@@ -515,7 +549,7 @@ export default function LineageFinder() {
 
   <div className="snapshot-details">
     <div>
-      <span>API LOCATION</span>
+      <span>BIOGRAPHICAL LOCATION</span>
 
       <p>
         {selectedApiArtist["begin-area"]?.name ||
@@ -553,6 +587,28 @@ export default function LineageFinder() {
     direct influences or where the artist developed their career.
   </p>
 </header>
+<section className="artist-discography">
+  <p className="section-label">DISCOGRAPHY</p>
+  <h3>Albums</h3>
+
+  {isLoadingAlbums ? (
+    <p>Loading albums...</p>
+  ) : albums.length > 0 ? (
+    <div className="album-list">
+      {albums.map((album) => (
+        <article className="album-item" key={album.id}>
+          <span className="album-year">
+            {album.date ? album.date.slice(0, 4) : "—"}
+          </span>
+
+          <h4>{album.title}</h4>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <p>No albums found.</p>
+  )}
+</section>
     <section className="lineage-path">
   <div className="lineage-heading">
     <p className="section-label">YOUR HIP-HOP LINEAGE</p>
@@ -591,7 +647,6 @@ export default function LineageFinder() {
                 : "HISTORICAL CONNECTION"}
             </p>
 
-            <h4>{step}</h4>
             {concept ? (
   <button
     type="button"
@@ -627,84 +682,7 @@ export default function LineageFinder() {
     })}
   </div>
 </section>
-{selectedConceptData && (
-  <section className="concept-archive">
-    <div className="concept-archive-header">
-      <p className="section-label">FROM THE ARCHIVE</p>
 
-      <h3>{selectedConceptData.name}</h3>
-
-      <p>{selectedConceptData.description}</p>
-    </div>
-
-    {conceptEvents.length > 0 ? (
-      <div className="connected-events">
-        {conceptEvents.map((event) => (
-          <article key={event.id}>
-            <span>
-              {event.year}
-              {event.endYear && `–${event.endYear}`}
-            </span>
-
-            <h4>{event.title}</h4>
-
-            <p>{event.significance}</p>
-          </article>
-        ))}
-      </div>
-    ) : (
-      <p>
-        No archive events are currently connected to this concept.
-      </p>
-    )}
-  </section>
-)}
-    <section className="lineage-events generated-lineage">
-  <p className="section-label">GENERATED FROM THE ARCHIVE</p>
-
-  <h3>
-    How {selectedApiArtist.name} Connects to Hip-Hop History
-  </h3>
-
-  <p className="generated-explanation">
-    These connections are generated by comparing the artist's musical
-    metadata with themes and regions represented in the Hip-Hop Archive.
-  </p>
-
-  {generatedConnections.length > 0 ? (
-    <div className="connected-events">
-      {generatedConnections.map(({ event, reasons }) => (
-        <article key={event.id}>
-          <span>
-            {event.year}
-            {event.endYear && `–${event.endYear}`}
-          </span>
-
-          <h4>{event.title}</h4>
-
-          <p>{event.significance}</p>
-
-          {reasons.length > 0 && (
-            <div className="connection-reasons">
-              <strong>Connected through:</strong>
-
-              <div>
-                {reasons.map((reason) => (
-                  <span key={reason}>{reason}</span>
-                ))}
-              </div>
-            </div>
-          )}
-        </article>
-      ))}
-    </div>
-  ) : (
-    <p>
-      We don't have enough matching information to generate a lineage
-      for this artist yet.
-    </p>
-  )}
-</section>
   </div>
 )}
 
@@ -735,9 +713,10 @@ export default function LineageFinder() {
           </div>
 
           {/* Lineage */}
-            <section className="lineage-path">
+       <section className="lineage-path">
   <div className="lineage-heading">
     <p className="section-label">YOUR HIP-HOP LINEAGE</p>
+
     <h3>
       How {selectedArtist.name} connects to hip-hop history.
     </h3>
@@ -745,20 +724,60 @@ export default function LineageFinder() {
 
   <div className="lineage-steps">
     {selectedArtist.lineage.map((step, index) => {
-      const isLast = index === selectedArtist.lineage.length - 1;
+      const isLast =
+        index === selectedArtist.lineage.length - 1;
+
+      const concept = getLineageConcept(step);
 
       return (
         <div
-          className={`lineage-step ${isLast ? "current-artist" : ""}`}
+          className={`lineage-step ${
+            isLast ? "current-artist" : ""
+          }`}
           key={step}
         >
           <div className="lineage-node">
-            <span>{String(index + 1).padStart(2, "0")}</span>
+            <span>
+              {String(index + 1).padStart(2, "0")}
+            </span>
           </div>
 
           <div className="lineage-step-content">
-            <p>{isLast ? "YOUR ARTIST" : "INFLUENCE"}</p>
-            <h4>{step}</h4>
+            <p>
+              {isLast
+                ? "YOUR ARTIST"
+                : "HISTORICAL CONNECTION"}
+            </p>
+
+            {concept ? (
+              <button
+                type="button"
+                className="lineage-concept-button"
+                onClick={() =>
+                  setSelectedConcept(
+                    selectedConcept === concept.name
+                      ? null
+                      : concept.name
+                  )
+                }
+              >
+                <h4>{step}</h4>
+
+                <span>
+                  {selectedConcept === concept.name
+                    ? "CLOSE ARCHIVE"
+                    : "EXPLORE IN ARCHIVE →"}
+                </span>
+              </button>
+            ) : (
+              <h4>{step}</h4>
+            )}
+
+            {concept && (
+              <p className="lineage-description">
+                {concept.description}
+              </p>
+            )}
           </div>
         </div>
       );
@@ -785,6 +804,33 @@ export default function LineageFinder() {
             </div>
           </section>
         </div>
+      )}
+
+      {selectedConceptData && (
+        <section className="concept-archive">
+          <div className="concept-archive-header">
+            <p className="section-label">FROM THE ARCHIVE</p>
+            <h3>{selectedConceptData.name}</h3>
+            <p>{selectedConceptData.description}</p>
+          </div>
+
+          {conceptEvents.length > 0 ? (
+            <div className="connected-events">
+              {conceptEvents.map((event) => (
+                <article key={event.id}>
+                  <span>
+                    {event.year}
+                    {event.endYear && `–${event.endYear}`}
+                  </span>
+                  <h4>{event.title}</h4>
+                  <p>{event.significance}</p>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p>No archive events are currently connected to this concept.</p>
+          )}
+        </section>
       )}
     </section>
   );

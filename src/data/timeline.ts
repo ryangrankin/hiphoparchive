@@ -19,6 +19,7 @@ export const timelineEvents: TimelineEvent[] = [
       "call and response",
       "community",
     ],
+    lineageConcepts: ["african-american-musical-traditions"],
     location: "Africa and the Americas",
     sources: [
       {
@@ -47,6 +48,7 @@ export const timelineEvents: TimelineEvent[] = [
       "cultural survival",
       "oral tradition",
     ],
+    lineageConcepts: ["african-american-musical-traditions"],
     location: "United States",
     sources: [
       {
@@ -75,6 +77,7 @@ export const timelineEvents: TimelineEvent[] = [
       "oral tradition",
       "resistance",
     ],
+    lineageConcepts: ["african-american-musical-traditions"],
     location: "American South",
     sources: [
       {
@@ -143,6 +146,7 @@ export const timelineEvents: TimelineEvent[] = [
       "preservation",
       "Black education",
     ],
+    lineageConcepts: ["african-american-musical-traditions"],
     location: "Nashville, Tennessee",
     artists: ["Fisk Jubilee Singers"],
     sources: [
@@ -206,6 +210,7 @@ export const timelineEvents: TimelineEvent[] = [
       "Black music",
       "American South",
     ],
+    lineageConcepts: ["african-american-musical-traditions", "jazz-black-musical-experimentation"],
     location: "American South",
     sources: [
       {
@@ -237,6 +242,7 @@ export const timelineEvents: TimelineEvent[] = [
       "gospel",
       "cultural exchange",
     ],
+    lineageConcepts: ["african-american-musical-traditions"],
     location: "United States",
     sources: [
       {
@@ -268,6 +274,7 @@ export const timelineEvents: TimelineEvent[] = [
     era: "1970s",
     category: "culture",
     themes: ["DJing", "parties", "Bronx", "origins"],
+    lineageConcepts: ["birth-of-hip-hop", "women-in-hip-hop", "caribbean-diasporic-traditions"],
     location: "Bronx, New York",
     artists: ["DJ Kool Herc", "Cindy Campbell"],
     womenInHipHop: true,
@@ -285,6 +292,7 @@ export const timelineEvents: TimelineEvent[] = [
     era: "1970s",
     category: "song",
     themes: ["recording", "commercialization"],
+    lineageConcepts: ["hip-hop-expands"],
     artists: ["The Sugarhill Gang"],
     sources: [],
   },
@@ -300,6 +308,7 @@ export const timelineEvents: TimelineEvent[] = [
     era: "1980s",
     category: "song",
     themes: ["urban life", "social commentary"],
+    lineageConcepts: ["conscious-political-hip-hop", "east-coast-hip-hop"],
     location: "New York",
     artists: ["Grandmaster Flash and the Furious Five"],
     sources: [],
@@ -323,6 +332,7 @@ export const timelineEvents: TimelineEvent[] = [
     "urban culture",
     "identity",
   ],
+  lineageConcepts: ["african-american-musical-traditions", "jazz-black-musical-experimentation"],
   location: "Harlem, New York",
   sources: [
     {
@@ -351,6 +361,7 @@ export const timelineEvents: TimelineEvent[] = [
     "Black music",
     "performance",
   ],
+  lineageConcepts: ["jazz-black-musical-experimentation"],
   location: "United States",
   sources: [
     {
@@ -379,6 +390,7 @@ export const timelineEvents: TimelineEvent[] = [
     "call and response",
     "vocal performance",
   ],
+  lineageConcepts: ["african-american-musical-traditions", "soul-rnb"],
   location: "United States",
   sources: [
     {
@@ -407,6 +419,7 @@ export const timelineEvents: TimelineEvent[] = [
     "music industry",
     "dance music",
   ],
+  lineageConcepts: ["soul-rnb"],
   location: "United States",
   sources: [
     {
@@ -436,6 +449,7 @@ export const timelineEvents: TimelineEvent[] = [
     "protest",
     "political expression",
   ],
+  lineageConcepts: ["conscious-political-hip-hop"],
   location: "United States",
   sources: [
     {
@@ -464,6 +478,7 @@ export const timelineEvents: TimelineEvent[] = [
     "toasting",
     "Caribbean diaspora",
   ],
+  lineageConcepts: ["caribbean-diasporic-traditions"],
   location: "Jamaica",
   sources: [
     {
@@ -493,6 +508,7 @@ export const timelineEvents: TimelineEvent[] = [
     "Black identity",
     "sampling",
   ],
+  lineageConcepts: ["soul-rnb"],
   location: "United States",
   sources: [
     {
@@ -522,6 +538,7 @@ export const timelineEvents: TimelineEvent[] = [
     "cultural nationalism",
     "resistance",
   ],
+  lineageConcepts: ["conscious-political-hip-hop"],
   location: "United States",
   sources: [
     {
@@ -550,6 +567,7 @@ export const timelineEvents: TimelineEvent[] = [
     "DJing",
     "sampling",
   ],
+  lineageConcepts: ["funk-break-based-music"],
   location: "United States",
   artists: ["James Brown"],
   sources: [
@@ -580,6 +598,7 @@ export const timelineEvents: TimelineEvent[] = [
     "politics",
     "performance",
   ],
+  lineageConcepts: ["conscious-political-hip-hop"],
   location: "United States",
   artists: [
     "Amiri Baraka",
@@ -615,6 +634,7 @@ export const timelineEvents: TimelineEvent[] = [
     "urban renewal",
     "youth culture",
   ],
+  lineageConcepts: ["birth-of-hip-hop"],
   location: "Bronx, New York",
   sources: [
     {
@@ -644,6 +664,7 @@ export const timelineEvents: TimelineEvent[] = [
     "breaking",
     "community",
   ],
+  lineageConcepts: ["birth-of-hip-hop"],
   location: "Bronx, New York",
   sources: [
     {
@@ -670,6 +691,7 @@ export const timelineEvents: TimelineEvent[] = [
     "community",
     "origins",
   ],
+  lineageConcepts: ["birth-of-hip-hop", "women-in-hip-hop", "caribbean-diasporic-traditions"],
   location: "Bronx, New York",
   artists: ["DJ Kool Herc", "Cindy Campbell"],
   womenInHipHop: true,
@@ -699,6 +721,7 @@ export const timelineEvents: TimelineEvent[] = [
     "Merry-Go-Round",
     "innovation",
   ],
+  lineageConcepts: ["birth-of-hip-hop", "funk-break-based-music", "caribbean-diasporic-traditions"],
   location: "Bronx, New York",
   artists: ["DJ Kool Herc"],
   sources: [
@@ -727,6 +750,7 @@ export const timelineEvents: TimelineEvent[] = [
     "dance",
     "breakbeats",
   ],
+  lineageConcepts: ["birth-of-hip-hop"],
   location: "New York City",
   sources: [
     {
@@ -754,6 +778,7 @@ export const timelineEvents: TimelineEvent[] = [
     "parties",
     "rhyming",
   ],
+  lineageConcepts: ["birth-of-hip-hop"],
   location: "Bronx, New York",
   artists: ["Coke La Rock"],
   sources: [
@@ -782,6 +807,7 @@ export const timelineEvents: TimelineEvent[] = [
     "breakbeats",
     "technology",
   ],
+  lineageConcepts: ["birth-of-hip-hop"],
   location: "Bronx, New York",
   artists: ["Grandmaster Flash"],
   sources: [
@@ -810,6 +836,7 @@ export const timelineEvents: TimelineEvent[] = [
     "New York",
     "youth culture",
   ],
+  lineageConcepts: ["birth-of-hip-hop"],
   location: "New York City",
   sources: [
     {
@@ -837,6 +864,7 @@ export const timelineEvents: TimelineEvent[] = [
     "DJing",
     "organization",
   ],
+  lineageConcepts: ["birth-of-hip-hop"],
   location: "Bronx, New York",
   artists: ["Afrika Bambaataa"],
   sources: [
@@ -865,6 +893,7 @@ export const timelineEvents: TimelineEvent[] = [
     "women",
     "Sugar Hill Records",
   ],
+  lineageConcepts: ["women-in-hip-hop", "hip-hop-expands"],
   location: "Englewood, New Jersey",
   artists: ["Sylvia Robinson"],
   womenInHipHop: true,
@@ -893,6 +922,7 @@ export const timelineEvents: TimelineEvent[] = [
     "rap",
     "music industry",
   ],
+  lineageConcepts: ["hip-hop-expands"],
   location: "New York metropolitan area",
   artists: ["The Sugarhill Gang"],
   sources: [
@@ -920,6 +950,7 @@ export const timelineEvents: TimelineEvent[] = [
     "Sugar Hill Records",
     "recording",
   ],
+  lineageConcepts: ["women-in-hip-hop"],
   location: "South Carolina / New York",
   artists: ["The Sequence", "Angie Stone"],
   womenInHipHop: true,
@@ -948,6 +979,7 @@ export const timelineEvents: TimelineEvent[] = [
     "early hip-hop",
     "Bronx",
   ],
+  lineageConcepts: ["women-in-hip-hop", "birth-of-hip-hop"],
   location: "Bronx, New York",
   artists: ["Funky 4 + 1", "Sha-Rock"],
   womenInHipHop: true,
@@ -976,6 +1008,7 @@ export const timelineEvents: TimelineEvent[] = [
     "women",
     "commercialization",
   ],
+  lineageConcepts: ["women-in-hip-hop", "hip-hop-expands"],
   location: "New York City",
   artists: ["Funky 4 + 1", "Sha-Rock"],
   womenInHipHop: true,
@@ -1004,6 +1037,7 @@ export const timelineEvents: TimelineEvent[] = [
     "inequality",
     "recording",
   ],
+  lineageConcepts: ["conscious-political-hip-hop", "east-coast-hip-hop"],
   location: "New York City",
   artists: ["Grandmaster Flash and the Furious Five", "Melle Mel"],
   sources: [
@@ -1032,6 +1066,7 @@ export const timelineEvents: TimelineEvent[] = [
     "electro",
     "production",
   ],
+  lineageConcepts: ["alternative-experimental-hip-hop", "east-coast-hip-hop"],
   location: "New York City",
   artists: ["Afrika Bambaataa", "Soulsonic Force"],
   sources: [
@@ -1058,6 +1093,7 @@ export const timelineEvents: TimelineEvent[] = [
     "drum machines",
     "mainstream expansion",
   ],
+  lineageConcepts: ["east-coast-hip-hop", "hip-hop-expands"],
   location: "Queens, New York",
   artists: ["Run-DMC"],
   sources: [
@@ -1086,6 +1122,7 @@ export const timelineEvents: TimelineEvent[] = [
     "MCing",
     "Roxanne Wars",
   ],
+  lineageConcepts: ["women-in-hip-hop", "east-coast-hip-hop"],
   location: "Queens, New York",
   artists: ["Roxanne Shanté"],
   womenInHipHop: true,
@@ -1114,6 +1151,7 @@ export const timelineEvents: TimelineEvent[] = [
     "commercialization",
     "music industry",
   ],
+  lineageConcepts: ["east-coast-hip-hop", "hip-hop-expands"],
   location: "New York City",
   artists: ["Rick Rubin", "Russell Simmons"],
   sources: [
@@ -1142,6 +1180,7 @@ export const timelineEvents: TimelineEvent[] = [
     "globalization",
     "popular culture",
   ],
+  lineageConcepts: ["hip-hop-expands"],
   location: "United States",
   sources: [
     {
@@ -1168,6 +1207,7 @@ export const timelineEvents: TimelineEvent[] = [
     "albums",
     "commercialization",
   ],
+  lineageConcepts: ["east-coast-hip-hop"],
   location: "Queens, New York",
   artists: ["LL Cool J"],
   sources: [
@@ -1196,6 +1236,7 @@ export const timelineEvents: TimelineEvent[] = [
     "layering",
     "drum machines",
   ],
+  lineageConcepts: ["funk-break-based-music"],
   location: "United States",
   sources: [
     {
@@ -1223,6 +1264,7 @@ export const timelineEvents: TimelineEvent[] = [
     "sexuality",
     "women MCs",
   ],
+  lineageConcepts: ["women-in-hip-hop", "east-coast-hip-hop"],
   location: "New York City",
   artists: ["Salt-N-Pepa"],
   womenInHipHop: true,
@@ -1252,6 +1294,7 @@ export const timelineEvents: TimelineEvent[] = [
     "mainstream expansion",
     "commercialization",
   ],
+  lineageConcepts: ["hip-hop-expands"],
   location: "United States",
   artists: ["Run-DMC", "Aerosmith"],
   sources: [
@@ -1280,6 +1323,7 @@ export const timelineEvents: TimelineEvent[] = [
     "rhyme",
     "Golden Age",
   ],
+  lineageConcepts: ["east-coast-hip-hop"],
   location: "New York",
   artists: ["Eric B. & Rakim", "Rakim"],
   sources: [
@@ -1307,6 +1351,7 @@ export const timelineEvents: TimelineEvent[] = [
     "lyricism",
     "storytelling",
   ],
+  lineageConcepts: ["women-in-hip-hop", "east-coast-hip-hop"],
   location: "Brooklyn, New York",
   artists: ["MC Lyte"],
   womenInHipHop: true,
@@ -1336,6 +1381,7 @@ export const timelineEvents: TimelineEvent[] = [
     "protest",
     "layering",
   ],
+  lineageConcepts: ["conscious-political-hip-hop", "east-coast-hip-hop"],
   location: "Long Island, New York",
   artists: ["Public Enemy", "Chuck D", "Flavor Flav"],
   sources: [
@@ -1364,6 +1410,7 @@ export const timelineEvents: TimelineEvent[] = [
     "censorship",
     "regional hip-hop",
   ],
+  lineageConcepts: ["west-coast-hip-hop", "gangsta-rap", "conscious-political-hip-hop"],
   location: "Compton, California",
   artists: ["N.W.A"],
   sources: [
@@ -1392,6 +1439,7 @@ export const timelineEvents: TimelineEvent[] = [
     "globalization",
     "commercialization",
   ],
+  lineageConcepts: ["hip-hop-expands"],
   location: "United States",
   sources: [
     {
@@ -1419,6 +1467,7 @@ export const timelineEvents: TimelineEvent[] = [
     "gender",
     "empowerment",
   ],
+  lineageConcepts: ["women-in-hip-hop", "conscious-political-hip-hop", "east-coast-hip-hop"],
   location: "New Jersey",
   artists: ["Queen Latifah"],
   womenInHipHop: true,
@@ -1448,6 +1497,7 @@ export const timelineEvents: TimelineEvent[] = [
     "experimentation",
     "production",
   ],
+  lineageConcepts: ["alternative-experimental-hip-hop", "east-coast-hip-hop"],
   location: "Long Island, New York",
   artists: ["De La Soul"],
   sources: [
@@ -1475,6 +1525,7 @@ export const timelineEvents: TimelineEvent[] = [
     "regional exchange",
     "sampling",
   ],
+  lineageConcepts: ["west-coast-hip-hop", "gangsta-rap", "conscious-political-hip-hop"],
   location: "Los Angeles, California",
   artists: ["Ice Cube", "The Bomb Squad"],
   sources: [
@@ -1503,6 +1554,7 @@ export const timelineEvents: TimelineEvent[] = [
     "misogyny",
     "respect",
   ],
+  lineageConcepts: ["women-in-hip-hop", "conscious-political-hip-hop", "east-coast-hip-hop"],
   location: "United States",
   artists: ["Queen Latifah"],
   womenInHipHop: true,
@@ -1532,6 +1584,7 @@ export const timelineEvents: TimelineEvent[] = [
     "regional hip-hop",
     "commercialization",
   ],
+  lineageConcepts: ["west-coast-hip-hop", "gangsta-rap", "funk-break-based-music"],
   location: "Los Angeles, California",
   artists: ["Dr. Dre", "Snoop Dogg"],
   sources: [
@@ -1588,6 +1641,7 @@ export const timelineEvents: TimelineEvent[] = [
     "urban life",
     "production",
   ],
+  lineageConcepts: ["east-coast-hip-hop"],
   location: "Queens, New York",
   artists: ["Nas"],
   sources: [
@@ -1615,6 +1669,7 @@ export const timelineEvents: TimelineEvent[] = [
     "commercialization",
     "New York",
   ],
+  lineageConcepts: ["east-coast-hip-hop"],
   location: "Brooklyn, New York",
   artists: ["The Notorious B.I.G."],
   sources: [
@@ -1642,6 +1697,7 @@ export const timelineEvents: TimelineEvent[] = [
     "regional identity",
     "Dirty South",
   ],
+  lineageConcepts: ["southern-hip-hop", "alternative-experimental-hip-hop", "hip-hop-expands"],
   location: "Atlanta, Georgia",
   artists: ["Outkast", "André 3000", "Big Boi"],
   sources: [
@@ -1698,6 +1754,7 @@ export const timelineEvents: TimelineEvent[] = [
     "Black motherhood",
     "vulnerability",
   ],
+  lineageConcepts: ["west-coast-hip-hop"],
   location: "United States",
   artists: ["2Pac", "Afeni Shakur"],
   sources: [
@@ -1726,6 +1783,7 @@ export const timelineEvents: TimelineEvent[] = [
     "fashion",
     "representation",
   ],
+  lineageConcepts: ["women-in-hip-hop", "east-coast-hip-hop"],
   location: "Brooklyn, New York",
   artists: ["Lil' Kim"],
   womenInHipHop: true,
@@ -1756,6 +1814,7 @@ export const timelineEvents: TimelineEvent[] = [
     "violence",
     "commercialization",
   ],
+  lineageConcepts: ["west-coast-hip-hop", "east-coast-hip-hop"],
   location: "United States",
   artists: ["2Pac", "The Notorious B.I.G."],
   sources: [
@@ -1784,6 +1843,7 @@ export const timelineEvents: TimelineEvent[] = [
     "technology",
     "creative control",
   ],
+  lineageConcepts: ["women-in-hip-hop", "alternative-experimental-hip-hop"],
   location: "Virginia",
   artists: ["Missy Elliott", "Timbaland"],
   womenInHipHop: true,
@@ -1813,6 +1873,7 @@ export const timelineEvents: TimelineEvent[] = [
     "R&B",
     "identity",
   ],
+  lineageConcepts: ["women-in-hip-hop", "east-coast-hip-hop", "alternative-experimental-hip-hop", "soul-rnb", "caribbean-diasporic-traditions"],
   location: "New Jersey",
   artists: ["Lauryn Hill"],
   womenInHipHop: true,
@@ -1842,6 +1903,7 @@ export const timelineEvents: TimelineEvent[] = [
     "Cash Money",
     "bounce",
   ],
+  lineageConcepts: ["southern-hip-hop"],
   location: "New Orleans, Louisiana",
   artists: ["Juvenile", "Cash Money Records", "Mannie Fresh"],
   sources: [
@@ -1870,6 +1932,7 @@ export const timelineEvents: TimelineEvent[] = [
     "lyricism",
     "politics",
   ],
+  lineageConcepts: ["conscious-political-hip-hop", "alternative-experimental-hip-hop", "east-coast-hip-hop"],
   location: "Brooklyn, New York",
   artists: ["Mos Def", "Talib Kweli", "Black Star"],
   sources: [
@@ -1924,6 +1987,7 @@ export const timelineEvents: TimelineEvent[] = [
     "regional identity",
     "production",
   ],
+  lineageConcepts: ["southern-hip-hop", "alternative-experimental-hip-hop"],
   location: "Atlanta, Georgia",
   artists: ["Outkast", "André 3000", "Big Boi"],
   sources: [
@@ -1979,6 +2043,7 @@ export const timelineEvents: TimelineEvent[] = [
     "music videos",
     "creative control",
   ],
+  lineageConcepts: ["women-in-hip-hop", "alternative-experimental-hip-hop"],
   location: "United States",
   artists: ["Missy Elliott", "Timbaland"],
   womenInHipHop: true,
@@ -2064,6 +2129,7 @@ export const timelineEvents: TimelineEvent[] = [
     "dance",
     "regional identity",
   ],
+  lineageConcepts: ["southern-hip-hop"],
   location: "Atlanta, Georgia",
   artists: ["Lil Jon", "Lil Jon & the East Side Boyz"],
   sources: [
@@ -2091,6 +2157,7 @@ export const timelineEvents: TimelineEvent[] = [
     "experimentation",
     "commercialization",
   ],
+  lineageConcepts: ["southern-hip-hop", "alternative-experimental-hip-hop"],
   location: "Atlanta, Georgia",
   artists: ["Outkast", "André 3000", "Big Boi"],
   sources: [
@@ -2119,6 +2186,7 @@ export const timelineEvents: TimelineEvent[] = [
     "identity",
     "Chicago",
   ],
+  lineageConcepts: ["alternative-experimental-hip-hop", "soul-rnb"],
   location: "Chicago, Illinois",
   artists: ["Kanye West"],
   sources: [
@@ -2147,6 +2215,7 @@ export const timelineEvents: TimelineEvent[] = [
     "Southern hip-hop",
     "regional culture",
   ],
+  lineageConcepts: ["southern-hip-hop"],
   location: "Atlanta, Georgia",
   artists: ["D4L", "Dem Franchize Boyz"],
   sources: [
@@ -2314,6 +2383,7 @@ export const timelineEvents: TimelineEvent[] = [
     "technology",
     "vulnerability",
   ],
+  lineageConcepts: ["alternative-experimental-hip-hop", "soul-rnb"],
   location: "United States",
   artists: ["Kanye West"],
   sources: [
@@ -2399,6 +2469,7 @@ export const timelineEvents: TimelineEvent[] = [
     "R&B",
     "Toronto",
   ],
+  lineageConcepts: ["soul-rnb", "alternative-experimental-hip-hop"],
   location: "Toronto, Canada",
   artists: ["Drake"],
   sources: [
@@ -2427,6 +2498,7 @@ export const timelineEvents: TimelineEvent[] = [
     "internet",
     "globalization",
   ],
+  lineageConcepts: ["drill"],
   location: "Chicago, Illinois",
   artists: ["Chief Keef"],
   sources: [
@@ -2455,6 +2527,7 @@ export const timelineEvents: TimelineEvent[] = [
     "community",
     "concept album",
   ],
+  lineageConcepts: ["west-coast-hip-hop", "conscious-political-hip-hop"],
   location: "Compton, California",
   artists: ["Kendrick Lamar"],
   sources: [
@@ -2483,6 +2556,7 @@ export const timelineEvents: TimelineEvent[] = [
     "flow",
     "production",
   ],
+  lineageConcepts: ["southern-hip-hop", "trap"],
   location: "Atlanta, Georgia",
   artists: ["Migos"],
   sources: [
@@ -2512,6 +2586,7 @@ export const timelineEvents: TimelineEvent[] = [
     "DIY",
     "digital culture",
   ],
+  lineageConcepts: ["hip-hop-expands", "alternative-experimental-hip-hop"],
   location: "United States",
   sources: [
     {
@@ -2539,6 +2614,7 @@ export const timelineEvents: TimelineEvent[] = [
     "funk",
     "protest",
   ],
+  lineageConcepts: ["west-coast-hip-hop", "conscious-political-hip-hop", "alternative-experimental-hip-hop", "jazz-black-musical-experimentation"],
   location: "Compton, California",
   artists: ["Kendrick Lamar"],
   sources: [
@@ -2622,6 +2698,7 @@ export const timelineEvents: TimelineEvent[] = [
     "representation",
     "Bronx",
   ],
+  lineageConcepts: ["women-in-hip-hop", "east-coast-hip-hop"],
   location: "Bronx, New York",
   artists: ["Cardi B"],
   womenInHipHop: true,
@@ -2762,6 +2839,7 @@ export const timelineEvents: TimelineEvent[] = [
     "social media",
     "Houston",
   ],
+  lineageConcepts: ["women-in-hip-hop", "southern-hip-hop"],
   location: "Houston, Texas",
   artists: ["Megan Thee Stallion", "Beyoncé"],
   womenInHipHop: true,
@@ -2791,6 +2869,7 @@ export const timelineEvents: TimelineEvent[] = [
     "race",
     "politics",
   ],
+  lineageConcepts: ["conscious-political-hip-hop"],
   location: "United States",
   sources: [
     {
@@ -2819,6 +2898,7 @@ export const timelineEvents: TimelineEvent[] = [
     "regional diversity",
     "music industry",
   ],
+  lineageConcepts: ["women-in-hip-hop"],
   location: "United States",
   artists: [
     "Megan Thee Stallion",
@@ -2855,6 +2935,7 @@ export const timelineEvents: TimelineEvent[] = [
     "regional hip-hop",
     "globalization",
   ],
+  lineageConcepts: ["drill", "east-coast-hip-hop"],
   location: "New York City",
   artists: ["Pop Smoke", "Fivio Foreign"],
   sources: [
@@ -2939,6 +3020,7 @@ export const timelineEvents: TimelineEvent[] = [
     "archives",
     "history",
   ],
+  lineageConcepts: ["hip-hop-expands"],
   location: "Global",
   artists: ["Cindy Campbell", "DJ Kool Herc"],
   womenInHipHop: true,
@@ -2968,6 +3050,7 @@ export const timelineEvents: TimelineEvent[] = [
     "history",
     "recognition",
   ],
+  lineageConcepts: ["women-in-hip-hop"],
   location: "United States",
   womenInHipHop: true,
   sources: [
@@ -2996,6 +3079,7 @@ export const timelineEvents: TimelineEvent[] = [
     "lyricism",
     "competition",
   ],
+  lineageConcepts: ["conscious-political-hip-hop"],
   location: "United States",
   artists: ["Kendrick Lamar", "Drake"],
   sources: [
@@ -3024,6 +3108,7 @@ export const timelineEvents: TimelineEvent[] = [
     "experimentation",
     "representation",
   ],
+  lineageConcepts: ["women-in-hip-hop", "southern-hip-hop", "alternative-experimental-hip-hop"],
   location: "Tampa, Florida",
   artists: ["Doechii"],
   womenInHipHop: true,
