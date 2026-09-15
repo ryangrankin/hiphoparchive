@@ -223,7 +223,7 @@ export const lineageConcepts: LineageConcept[] = [
     "reggae",
     "dancehall",
   ],
-  relatedTimelineEvents: [],
+  
 },
 
 {
@@ -238,6 +238,5 @@ export const lineageConcepts: LineageConcept[] = [
     "hip-hop feminism",
     "women rappers",
   ],
-  relatedTimelineEvents: [],
 },
 ];
