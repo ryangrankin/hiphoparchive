@@ -112,11 +112,18 @@ main > h1 + p {
   max-width: 700px;
 }
 
+.timeline-year-column {
+  grid-column: 1;
+  text-align: right;
+  padding-top: 7px;
+}
+
 .timeline-year {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 0.85rem;
   font-weight: bold;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
 .timeline-title {
@@ -190,6 +197,80 @@ main > h1 + p {
   font-size: 1.1rem;
 }
 
+/* WOMEN IN HIP-HOP */
+
+.women-hero {
+  padding-top: 30px;
+  max-width: 950px;
+}
+
+.women-hero h1 {
+  margin: 10px 0 35px;
+  font-size: clamp(4rem, 10vw, 8rem);
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+  text-transform: uppercase;
+}
+
+.women-intro {
+  max-width: 650px;
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.women-overview {
+  margin-top: 130px;
+  border-top: 2px solid #171717;
+  border-bottom: 2px solid #171717;
+  padding: 50px 0;
+}
+
+.overview-heading {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.overview-heading h2 {
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.women-roles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid #171717;
+}
+
+.women-roles article {
+  padding: 25px 25px 10px 0;
+}
+
+.women-roles article:not(:last-child) {
+  border-right: 1px solid #aaa;
+  margin-right: 25px;
+}
+
+.women-roles span {
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.women-roles h3 {
+  margin: 35px 0 15px;
+  font-size: 1.4rem;
+}
+
+.women-roles p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
 /* MOBILE */
 
 @media (max-width: 600px) {
@@ -219,6 +300,32 @@ main > h1 + p {
     grid-column: 2;
     padding-left: 20px;
   }
+  .women-overview {
+  margin-top: 80px;
+}
+
+.overview-heading {
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.women-roles {
+  grid-template-columns: 1fr;
+}
+
+.women-roles article {
+  padding: 25px 0;
+  border-bottom: 1px solid #aaa;
+}
+
+.women-roles article:not(:last-child) {
+  border-right: 0;
+  margin-right: 0;
+}
+
+.women-roles h3 {
+  margin-top: 15px;
+}
 }
 
 /* NAVIGATION */
