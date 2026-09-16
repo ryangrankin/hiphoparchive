@@ -42,15 +42,22 @@ export const hipHopPlaces: HipHopPlace[] = [
       "urban change",
     ],
     timelineEventIds: [
-      "bronx-postindustrial-crisis",
-      "block-party-culture",
-      "cindy-campbell-kool-herc-1973",
-      "kool-herc-merry-go-round",
-      "breaking-emerges",
-      "mcing-early-parties",
-      "grandmaster-flash-dj-techniques",
-      "graffiti-hip-hop-culture",
-    ],
+  "great-migration",
+  "harlem-renaissance",
+  "jazz-black-urban-culture",
+  "rhythm-and-blues",
+  "soul-music",
+
+  // pre existing NYC hip-hop IDs below
+  "bronx-postindustrial-crisis",
+  "block-party-culture",
+  "cindy-campbell-kool-herc-1973",
+  "kool-herc-merry-go-round",
+  "breaking-emerges",
+  "mcing-early-parties",
+  "grandmaster-flash-dj-techniques",
+  "graffiti-hip-hop-culture",
+],
     historicalLayers: [
   "migration",
   "jazz",
@@ -169,8 +176,9 @@ export const hipHopPlaces: HipHopPlace[] = [
       "regional identity",
     ],
     timelineEventIds: [
-      "juvenile-back-that-azz-up",
-    ],
+  "jazz-black-urban-culture",
+  "juvenile-back-that-azz-up",
+],
     historicalLayers: [
   "blues",
   "jazz",
@@ -225,8 +233,11 @@ export const hipHopPlaces: HipHopPlace[] = [
       "regional identity",
     ],
     timelineEventIds: [
-      "three-6-mafia-oscar",
-    ],
+  "blues-development",
+  "rhythm-and-blues",
+  "soul-music",
+  "three-6-mafia-oscar",
+],
     historicalLayers: [
   "blues",
   "soul-rnb",
@@ -252,8 +263,13 @@ export const hipHopPlaces: HipHopPlace[] = [
       "urban inequality",
     ],
     timelineEventIds: [
-      "chief-keef-drill-2012",
-    ],
+  "great-migration",
+  "blues-development",
+  "jazz-black-urban-culture",
+  "rhythm-and-blues",
+  "soul-music",
+  "chief-keef-drill-2012",
+],
     historicalLayers: [
   "migration",
   "blues",
@@ -309,7 +325,10 @@ export const hipHopPlaces: HipHopPlace[] = [
     "migration",
     "blues",
   ],
-  timelineEventIds: [],
+  timelineEventIds: [
+  "blues-development",
+  "great-migration",
+],
 },
 {
   id: "detroit",
@@ -334,7 +353,11 @@ export const hipHopPlaces: HipHopPlace[] = [
     "soul-rnb",
     "hip-hop",
   ],
-  timelineEventIds: [],
+  timelineEventIds: [
+  "great-migration",
+  "rhythm-and-blues",
+  "soul-music",
+],
 },{
   id: "philadelphia",
   city: "Philadelphia",
@@ -358,6 +381,9 @@ export const hipHopPlaces: HipHopPlace[] = [
     "soul-rnb",
     "hip-hop",
   ],
-  timelineEventIds: [],
+  timelineEventIds: [
+  "rhythm-and-blues",
+  "soul-music",
+],
 },
 ];
