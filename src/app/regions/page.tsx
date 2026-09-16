@@ -1,4 +1,19 @@
-import HipHopMap from "@/components/HipHopMap";
+"use client";
+
+import dynamic from "next/dynamic";
+
+const HipHopMap = dynamic(
+  () => import("@/components/HipHopMap"),
+  {
+    ssr: false,
+    loading: () => (
+      <section className="hip-hop-map-section">
+        <p className="section-label">INTERACTIVE MAP</p>
+        <p>Loading map...</p>
+      </section>
+    ),
+  }
+);
 
 export default function RegionsPage() {
   return (
