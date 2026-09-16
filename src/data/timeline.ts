@@ -264,24 +264,6 @@ export const timelineEvents: TimelineEvent[] = [
    */
 
   {
-    id: "cindy-campbell-kool-herc-1973",
-    year: 1973,
-    title: "Back-to-School Jam at 1520 Sedgwick Avenue",
-    description:
-      "Cindy Campbell organized a back-to-school party in the Bronx where her brother, DJ Kool Herc, provided the music.",
-    significance:
-      "The August 1973 party has become an important symbolic landmark in histories of hip-hop and highlights the role women played in hip-hop's early development.",
-    era: "1970s",
-    category: "culture",
-    themes: ["DJing", "parties", "Bronx", "origins"],
-    lineageConcepts: ["birth-of-hip-hop", "women-in-hip-hop", "caribbean-diasporic-traditions"],
-    location: "Bronx, New York",
-    artists: ["DJ Kool Herc", "Cindy Campbell"],
-    womenInHipHop: true,
-    sources: [],
-  },
-
-  {
     id: "rappers-delight-1979",
     year: 1979,
     title: "\"Rapper's Delight\" Is Released",
@@ -297,22 +279,6 @@ export const timelineEvents: TimelineEvent[] = [
     sources: [],
   },
 
-  {
-    id: "the-message-1982",
-    year: 1982,
-    title: "\"The Message\" Is Released",
-    description:
-      "Grandmaster Flash and the Furious Five released \"The Message.\"",
-    significance:
-      "The recording became an influential example of hip-hop addressing conditions of urban life and inequality.",
-    era: "1980s",
-    category: "song",
-    themes: ["urban life", "social commentary"],
-    lineageConcepts: ["conscious-political-hip-hop", "east-coast-hip-hop"],
-    location: "New York",
-    artists: ["Grandmaster Flash and the Furious Five"],
-    sources: [],
-  },
   {
   id: "harlem-renaissance",
   year: 1918,
@@ -902,34 +868,6 @@ export const timelineEvents: TimelineEvent[] = [
       title: "Sylvia Robinson",
       author: "National Museum of African American History and Culture",
       url: "https://nmaahc.si.edu/",
-    },
-  ],
-},
-
-{
-  id: "rappers-delight-1979",
-  year: 1979,
-  title: "\"Rapper's Delight\" Becomes a Commercial Breakthrough",
-  description:
-    "The Sugarhill Gang released \"Rapper's Delight\" in 1979. The recording brought rap to audiences far beyond the live party scenes where hip-hop had developed.",
-  significance:
-    "The record demonstrated hip-hop's commercial potential and helped transform a culture centered on live performance into a recorded musical industry. That transition also created new debates about authenticity, ownership, and commercialization.",
-  era: "1970s",
-  category: "song",
-  themes: [
-    "recording",
-    "commercialization",
-    "rap",
-    "music industry",
-  ],
-  lineageConcepts: ["hip-hop-expands"],
-  location: "New York metropolitan area",
-  artists: ["The Sugarhill Gang"],
-  sources: [
-    {
-      title: "Hip-Hop History",
-      author: "National Museum of African American History and Culture",
-      url: "https://nmaahc.si.edu/explore/stories/hip-hop-history",
     },
   ],
 },

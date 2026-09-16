@@ -34,8 +34,16 @@ export async function GET(
     );
 
     if (!response.ok) {
-      throw new Error(`MusicBrainz returned ${response.status}`);
-    }
+  console.warn(`MusicBrainz album lookup returned ${response.status}`);
+
+  return Response.json(
+    {
+      albums: [],
+      unavailable: true,
+    },
+    { status: 200 }
+  );
+}
 
     const data = await response.json();
 
@@ -101,14 +109,15 @@ export async function GET(
       albums: uniqueAlbums,
     });
   } catch (error) {
-    console.error("Album lookup failed:", error);
+  console.error("Relationship lookup unavailable:", error);
 
-    return NextResponse.json(
-      {
-        albums: [],
-        error: "Unable to load discography.",
-      },
-      { status: 500 }
-    );
-  }
+  return Response.json(
+    {
+      members: [],
+      groups: [],
+      unavailable: true,
+    },
+    { status: 200 }
+  );
+}
 }

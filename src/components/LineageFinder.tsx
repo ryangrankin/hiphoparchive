@@ -5,6 +5,7 @@ import { artists } from "@/data/artists";
 import { timelineEvents } from "@/data/timeline";
 import { lineageConcepts } from "@/data/lineageConcepts";
 import { useSearchParams } from "next/navigation";
+import { useFavoriteArtists } from "@/hooks/useFavoriteArtists";
 import Link from "next/link";
 
 type MusicBrainzArtist = {
@@ -104,14 +105,14 @@ function getMapPlaceFromLocation(location: string) {
     normalized.includes("queens") ||
     normalized.includes("harlem")
   ) {
-    return "new-york-city";
+    return "new-york";
   }
 
   if (
     normalized.includes("compton") ||
     normalized.includes("los angeles")
   ) {
-    return "los-angeles-compton";
+    return "los-angeles";
   }
 
   if (normalized.includes("oakland")) {
@@ -437,6 +438,7 @@ if (artistRegion) {
 export default function LineageFinder() {
   const [selectedArtistId, setSelectedArtistId] = useState("");
   const [search, setSearch] = useState("");
+  const { isFavorite, toggleFavorite } = useFavoriteArtists();
   const [apiResults, setApiResults] = useState<MusicBrainzArtist[]>([]);
   const [selectedConcept, setSelectedConcept] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
@@ -680,9 +682,32 @@ if (localArtist) {
 {selectedApiArtist && !selectedArtist && (
   <div className="lineage-result">
     <header className="artist-header artist-snapshot">
-  <p className="section-label">ARTIST SNAPSHOT</p>
+      <p className="section-label">ARTIST SNAPSHOT</p>
 
-  <h2>{selectedApiArtist.name}</h2>
+      <button
+        type="button"
+        className={`favorite-artist-button ${
+          isFavorite(selectedApiArtist.id) ? "is-favorite" : ""
+        }`}
+        onClick={() => {
+          const artistToFavorite = selectedApiArtist;
+
+          if (!artistToFavorite) return;
+
+          toggleFavorite({
+            id: artistToFavorite.id,
+            name: artistToFavorite.name,
+            mapPlaceId: apiArtistMapPlaceId ?? undefined,
+            mapSource: apiArtistMapPlaceId ? "metadata" : undefined,
+          });
+        }}
+      >
+        {isFavorite(selectedApiArtist.id)
+          ? "✓ ADDED TO MY ARTISTS"
+          : "+ ADD TO MY ARTISTS"}
+      </button>
+
+      <h2>{selectedApiArtist.name}</h2>
 
   <div className="snapshot-details">
     <div>
@@ -922,7 +947,7 @@ if (localArtist) {
         <div className="lineage-result">
  
         {/* Artist information */}
-<header className="artist-header streamlined-artist-profile">
+  <header className="artist-header streamlined-artist-profile">
   <p className="section-label">ARTIST SNAPSHOT</p>
 
   <h2>{selectedArtist.name}</h2>
@@ -934,6 +959,23 @@ if (localArtist) {
     <span>·</span>
     <span>{selectedArtist.era}</span>
   </div>
+
+  <button
+    type="button"
+    className={`favorite-artist-button ${
+      isFavorite(selectedArtist.id) ? "is-favorite" : ""
+    }`}
+    onClick={() =>
+      toggleFavorite({
+        id: selectedArtist.id,
+        name: selectedArtist.name,
+      })
+    }
+  >
+    {isFavorite(selectedArtist.id)
+      ? "✓ ADDED TO MY ARTISTS"
+      : "+ ADD TO MY ARTISTS"}
+  </button>
 
   <p className="streamlined-artist-description">
     {selectedArtist.description}
@@ -1012,24 +1054,25 @@ if (localArtist) {
           {/* Discography */}
 <section className="artist-discography">
   <p className="section-label">DISCOGRAPHY</p>
-  <h3>Albums</h3>
+  <h3>Studio Albums</h3>
 
-  {isLoadingAlbums ? (
-    <p>Loading albums...</p>
-  ) : albums.length > 0 ? (
+  {selectedArtist.albums && selectedArtist.albums.length > 0 ? (
     <div className="compact-album-grid">
-  {albums.map((album) => (
-    <article className="compact-album-item" key={album.id}>
-      <span className="compact-album-year">
-        {album.date ? album.date.slice(0, 4) : "—"}
-      </span>
+      {selectedArtist.albums.map((album) => (
+        <article
+          className="compact-album-item"
+          key={`${album.title}-${album.year}`}
+        >
+          <span className="compact-album-year">
+            {album.year}
+          </span>
 
-      <h4>{album.title}</h4>
-    </article>
-  ))}
-</div>
+          <h4>{album.title}</h4>
+        </article>
+      ))}
+    </div>
   ) : (
-    <p>No albums found.</p>
+    <p>No curated albums available.</p>
   )}
 </section>
 

@@ -176,7 +176,8 @@ export const artists: Artist[] = [
   name: "Lauryn Hill",
   era: "1990s–present",
   region: "East Coast",
-  location: "New Jersey",
+  location: "New Jersey / New York",
+  mapPlaceId: "new-york",
   description:
     "Lauryn Hill occupies a distinctive place across hip-hop, R&B, soul, and diasporic Black musical traditions. Through the Fugees and her solo work, she combined rapping, singing, songwriting, and production while exploring Black identity, womanhood, spirituality, love, authenticity, and the pressures of the music industry.",
   themes: [

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useFavoriteArtists } from "@/hooks/useFavoriteArtists";
 
 import {
   MapContainer,
@@ -53,6 +54,8 @@ function MapController({
 export default function HipHopMap() {
   const searchParams = useSearchParams();
   const placeParam = searchParams.get("place");
+
+  const { favorites } = useFavoriteArtists();
 
   const [selectedPlace, setSelectedPlace] =
     useState<HipHopPlace | null>(null);
@@ -117,6 +120,12 @@ export default function HipHopMap() {
     setSelectedRegion(matchingPlace.region);
     setSelectedLayer("all");
   }, [placeParam]);
+
+  function getFavoriteArtistsForPlace(placeId: string) {
+  return favorites.filter(
+    (favorite) => favorite.mapPlaceId === placeId
+  );
+}
 
   return (
     <section className="hip-hop-map-section">
@@ -283,39 +292,56 @@ export default function HipHopMap() {
               ))}
 
             {/* PLACE MARKERS */}
-            {visiblePlaces.map((place) => (
-              <CircleMarker
-                key={place.id}
-                center={[
-                  place.coordinates.lat,
-                  place.coordinates.lng,
-                ]}
-                radius={8}
-                pathOptions={{
-                  color: "#171717",
-                  fillColor: "#171717",
-                  fillOpacity: 1,
-                }}
-                eventHandlers={{
-                  click: () => setSelectedPlace(place),
-                }}
-              >
-                <Tooltip
-                  permanent
-                  direction="right"
-                  offset={[8, 0]}
-                  className="map-city-label"
-                >
-                  {place.city}
-                </Tooltip>
+            {visiblePlaces.map((place) => {
+                const placeFavorites = getFavoriteArtistsForPlace(place.id);
 
-                <Popup>
-                  <strong>{place.city}</strong>
-                  <br />
-                  {place.region}
-                </Popup>
-              </CircleMarker>
-            ))}
+                const hasFavorite = placeFavorites.length > 0;
+
+                return (
+                 <CircleMarker
+                    key={place.id}
+                    center={[
+                        place.coordinates.lat,
+                        place.coordinates.lng,
+                     ]}
+      radius={hasFavorite ? 11 : 8}
+      pathOptions={{
+        color: "#171717",
+        fillColor: hasFavorite ? "#b5442f" : "#171717",
+        fillOpacity: 1,
+        weight: hasFavorite ? 3 : 1,
+      }}
+      eventHandlers={{
+        click: () => setSelectedPlace(place),
+      }}
+    >
+      <Tooltip
+        permanent
+        direction="right"
+        offset={[8, 0]}
+        className="map-city-label"
+      >
+        {place.city}
+      </Tooltip>
+
+      <Popup>
+        <strong>{place.city}</strong>
+        <br />
+        {place.region}
+
+        {placeFavorites.length > 0 && (
+          <>
+            <br />
+            <strong>
+              ♥ {placeFavorites.length} saved{" "}
+              {placeFavorites.length === 1 ? "artist" : "artists"}
+            </strong>
+          </>
+        )}
+      </Popup>
+    </CircleMarker>
+  );
+})}
           </MapContainer>
         </div>
 
