@@ -1,13 +1,19 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+
 import {
   MapContainer,
   TileLayer,
   CircleMarker,
   Popup,
   Polyline,
+  Tooltip,
+  useMap,
 } from "react-leaflet";
+
 import "leaflet/dist/leaflet.css";
 
 import {
@@ -15,16 +21,44 @@ import {
   HipHopPlace,
   HistoricalLayer,
 } from "@/data/places";
-import { timelineEvents } from "@/data/timeline";
 
+import { timelineEvents } from "@/data/timeline";
 import { migrationRoutes } from "@/data/migrations";
 
+function MapController({
+  selectedPlace,
+}: {
+  selectedPlace: HipHopPlace | null;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!selectedPlace) return;
+
+    map.flyTo(
+      [
+        selectedPlace.coordinates.lat,
+        selectedPlace.coordinates.lng,
+      ],
+      7,
+      {
+        duration: 1.5,
+      }
+    );
+  }, [selectedPlace, map]);
+
+  return null;
+}
 
 export default function HipHopMap() {
+  const searchParams = useSearchParams();
+  const placeParam = searchParams.get("place");
+
   const [selectedPlace, setSelectedPlace] =
     useState<HipHopPlace | null>(null);
 
-  const [selectedRegion, setSelectedRegion] = useState("All");
+  const [selectedRegion, setSelectedRegion] =
+    useState("All");
 
   const [selectedLayer, setSelectedLayer] =
     useState<HistoricalLayer | "all">("all");
@@ -70,75 +104,104 @@ export default function HipHopMap() {
         .sort((a, b) => a.year - b.year)
     : [];
 
+  useEffect(() => {
+    if (!placeParam) return;
+
+    const matchingPlace = hipHopPlaces.find(
+      (place) => place.id === placeParam
+    );
+
+    if (!matchingPlace) return;
+
+    setSelectedPlace(matchingPlace);
+    setSelectedRegion(matchingPlace.region);
+    setSelectedLayer("all");
+  }, [placeParam]);
+
   return (
     <section className="hip-hop-map-section">
       <div className="map-heading">
         <p className="section-label">INTERACTIVE ARCHIVE</p>
         <h2>Mapping Hip-Hop</h2>
         <p>
-          Select a city to explore the artists, events, movements,
-          and regional histories connected to that place.
+          Select a city to explore the artists, events,
+          movements, and regional histories connected to that
+          place.
         </p>
       </div>
-    <div className="map-region-filters">
+
+      {/* REGION FILTERS */}
+      <div className="map-region-filters">
         {regions.map((region) => (
-            <button
-             key={region}
-             type="button"
-             className={selectedRegion === region ? "active" : ""}
-             onClick={() => {
-                setSelectedRegion(region);
-                setSelectedPlace(null);
+          <button
+            key={region}
+            type="button"
+            className={
+              selectedRegion === region ? "active" : ""
+            }
+            onClick={() => {
+              setSelectedRegion(region);
+              setSelectedPlace(null);
             }}
-         >
-         {region}
-        </button>
-    ))}
-    </div>
-    <div className="map-layer-filter-section">
-  <span className="map-filter-label">
-    HISTORICAL LAYER
-  </span>
+          >
+            {region}
+          </button>
+        ))}
+      </div>
 
-  <div className="map-layer-filters">
-    {historicalLayers.map((layer) => (
-      <button
-        key={layer.value}
-        type="button"
-        className={
-          selectedLayer === layer.value ? "active" : ""
-        }
-        onClick={() => {
-          setSelectedLayer(layer.value);
-          setSelectedPlace(null);
-        }}
-      >
-        {layer.label}
-      </button>
-    ))}
-  </div>
-</div>
-{selectedLayer === "migration" && (
-  <div className="migration-context">
-    <span>THE GREAT MIGRATION</span>
+      {/* HISTORICAL LAYER FILTERS */}
+      <div className="map-layer-filter-section">
+        <span className="map-filter-label">
+          HISTORICAL LAYER
+        </span>
 
-    <p>
-      The Great Migration transformed the geography of Black life in the
-      United States as millions of African Americans moved from the South
-      to cities in the North, Midwest, and West during the twentieth
-      century. The routes shown here represent broad migration patterns,
-      not individual journeys.
-    </p>
+        <div className="map-layer-filters">
+          {historicalLayers.map((layer) => (
+            <button
+              key={layer.value}
+              type="button"
+              className={
+                selectedLayer === layer.value
+                  ? "active"
+                  : ""
+              }
+              onClick={() => {
+                setSelectedLayer(layer.value);
+                setSelectedPlace(null);
+              }}
+            >
+              {layer.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
-    <p>
-      These movements helped reshape Black urban communities and musical
-      cultures. The map places migration alongside blues, jazz, soul,
-      R&B, and hip-hop to explore how musical history is connected to
-      changing geographies of Black American life.
-    </p>
-  </div>
-)}
+      {/* MIGRATION CONTEXT */}
+      {selectedLayer === "migration" && (
+        <div className="migration-context">
+          <span>THE GREAT MIGRATION</span>
+
+          <p>
+            The Great Migration transformed the geography of
+            Black life in the United States as millions of
+            African Americans moved from the South to cities in
+            the North, Midwest, and West during the twentieth
+            century. The routes shown here represent broad
+            migration patterns, not individual journeys.
+          </p>
+
+          <p>
+            These movements helped reshape Black urban
+            communities and musical cultures. The map places
+            migration alongside blues, jazz, soul, R&B, and
+            hip-hop to explore how musical history is connected
+            to changing geographies of Black American life.
+          </p>
+        </div>
+      )}
+
       <div className="map-layout">
+        {/* MAP */}
         <div className="map-container">
           <MapContainer
             center={[38.5, -96]}
@@ -151,68 +214,75 @@ export default function HipHopMap() {
               attribution="&copy; OpenStreetMap contributors"
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+
+            <MapController selectedPlace={selectedPlace} />
+
+            {/* GREAT MIGRATION ROUTES */}
             {selectedLayer === "migration" &&
-  migrationRoutes.map((route) => (
-    <Polyline
-      key={route.id}
-      positions={[
-        route.from.coordinates,
-        route.to.coordinates,
-      ]}
-      pathOptions={{
-        color: "#171717",
-        weight: 2,
-        opacity: 0.7,
-        dashArray: "8 8",
-      }}
-    >
-      <Popup>
-        <div className="migration-popup">
-          <strong>{route.name}</strong>
-          <span>{route.period}</span>
-          <p>{route.description}</p>
-        </div>
-      </Popup>
-    </Polyline>
-  ))}
-  {selectedLayer === "migration" &&
-  migrationRoutes.map((route) => (
-    <div key={`${route.id}-points`}>
-      <CircleMarker
-        center={route.from.coordinates}
-        radius={5}
-        pathOptions={{
-          color: "#171717",
-          fillColor: "#f4f0e8",
-          fillOpacity: 1,
-          weight: 2,
-        }}
-      >
-        <Popup>
-          <strong>{route.from.name}</strong>
-          <br />
-          Migration origin
-        </Popup>
-      </CircleMarker>
+              migrationRoutes.map((route) => (
+                <Polyline
+                  key={route.id}
+                  positions={[
+                    route.from.coordinates,
+                    route.to.coordinates,
+                  ]}
+                  pathOptions={{
+                    color: "#171717",
+                    weight: 2,
+                    opacity: 0.7,
+                    dashArray: "8 8",
+                  }}
+                >
+                  <Popup>
+                    <div className="migration-popup">
+                      <strong>{route.name}</strong>
+                      <span>{route.period}</span>
+                      <p>{route.description}</p>
+                    </div>
+                  </Popup>
+                </Polyline>
+              ))}
 
-      <CircleMarker
-        center={route.to.coordinates}
-        radius={5}
-        pathOptions={{
-          color: "#171717",
-          fillColor: "#171717",
-          fillOpacity: 1,
-        }}
-      >
-        <Popup>
-          <strong>{route.to.name}</strong>
-          <br />
-          Migration destination
-        </Popup>
-      </CircleMarker>
-    </div>
-  ))}
+            {/* MIGRATION ORIGIN / DESTINATION POINTS */}
+            {selectedLayer === "migration" &&
+              migrationRoutes.map((route) => (
+                <div key={`${route.id}-points`}>
+                  <CircleMarker
+                    center={route.from.coordinates}
+                    radius={5}
+                    pathOptions={{
+                      color: "#171717",
+                      fillColor: "#f4f0e8",
+                      fillOpacity: 1,
+                      weight: 2,
+                    }}
+                  >
+                    <Popup>
+                      <strong>{route.from.name}</strong>
+                      <br />
+                      Migration origin
+                    </Popup>
+                  </CircleMarker>
 
+                  <CircleMarker
+                    center={route.to.coordinates}
+                    radius={5}
+                    pathOptions={{
+                      color: "#171717",
+                      fillColor: "#171717",
+                      fillOpacity: 1,
+                    }}
+                  >
+                    <Popup>
+                      <strong>{route.to.name}</strong>
+                      <br />
+                      Migration destination
+                    </Popup>
+                  </CircleMarker>
+                </div>
+              ))}
+
+            {/* PLACE MARKERS */}
             {visiblePlaces.map((place) => (
               <CircleMarker
                 key={place.id}
@@ -230,6 +300,15 @@ export default function HipHopMap() {
                   click: () => setSelectedPlace(place),
                 }}
               >
+                <Tooltip
+                  permanent
+                  direction="right"
+                  offset={[8, 0]}
+                  className="map-city-label"
+                >
+                  {place.city}
+                </Tooltip>
+
                 <Popup>
                   <strong>{place.city}</strong>
                   <br />
@@ -240,22 +319,21 @@ export default function HipHopMap() {
           </MapContainer>
         </div>
 
+        {/* SELECTED PLACE PANEL */}
         <aside className="map-place-panel">
           {!selectedPlace ? (
             <div className="map-empty-state">
               <span>SELECT A LOCATION</span>
               <p>
-                Choose a point on the map to explore its place in
-                hip-hop history.
+                Choose a point on the map to explore its place
+                in hip-hop history.
               </p>
             </div>
           ) : (
             <>
               <div className="map-place-heading">
                 <span>{selectedPlace.region}</span>
-
                 <h3>{selectedPlace.city}</h3>
-
                 <p>{selectedPlace.state}</p>
               </div>
 
@@ -263,6 +341,7 @@ export default function HipHopMap() {
                 {selectedPlace.description}
               </p>
 
+              {/* PLACE & CULTURE */}
               <div className="map-place-themes">
                 <span>PLACE & CULTURE</span>
 
@@ -273,6 +352,26 @@ export default function HipHopMap() {
                 </div>
               </div>
 
+              {/* NOTABLE ARTISTS */}
+              <div className="map-notable-artists">
+                <p className="section-label">
+                  NOTABLE ARTISTS
+                </p>
+
+                <div className="map-artist-list">
+  {selectedPlace.notableArtists.map((artist) => (
+    <Link
+      key={artist}
+      href={`/lineage?artist=${encodeURIComponent(artist)}`}
+      className="map-artist-link"
+    >
+      {artist}
+    </Link>
+  ))}
+</div>
+              </div>
+
+              {/* RELATED ARCHIVE EVENTS */}
               {relatedEvents.length > 0 && (
                 <div className="map-related-events">
                   <span>FROM THE ARCHIVE</span>

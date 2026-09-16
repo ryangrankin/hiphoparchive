@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { artists } from "@/data/artists";
 import { timelineEvents } from "@/data/timeline";
 import { lineageConcepts } from "@/data/lineageConcepts";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type MusicBrainzArtist = {
   id: string;
@@ -87,6 +89,65 @@ function getRegionFromLocation(location: string) {
 
   if (eastCoastLocations.some((place) => normalized.includes(place))) {
     return "east coast";
+  }
+
+  return null;
+}
+
+function getMapPlaceFromLocation(location: string) {
+  const normalized = normalizeText(location);
+
+  if (
+    normalized.includes("new york") ||
+    normalized.includes("bronx") ||
+    normalized.includes("brooklyn") ||
+    normalized.includes("queens") ||
+    normalized.includes("harlem")
+  ) {
+    return "new-york-city";
+  }
+
+  if (
+    normalized.includes("compton") ||
+    normalized.includes("los angeles")
+  ) {
+    return "los-angeles-compton";
+  }
+
+  if (normalized.includes("oakland")) {
+    return "oakland";
+  }
+
+  if (normalized.includes("atlanta")) {
+    return "atlanta";
+  }
+
+  if (normalized.includes("new orleans")) {
+    return "new-orleans";
+  }
+
+  if (normalized.includes("houston")) {
+    return "houston";
+  }
+
+  if (normalized.includes("memphis")) {
+    return "memphis";
+  }
+
+  if (normalized.includes("chicago")) {
+    return "chicago";
+  }
+
+  if (normalized.includes("miami")) {
+    return "miami";
+  }
+
+  if (normalized.includes("detroit")) {
+    return "detroit";
+  }
+
+  if (normalized.includes("philadelphia")) {
+    return "philadelphia";
   }
 
   return null;
@@ -384,6 +445,8 @@ export default function LineageFinder() {
   const [groups, setGroups] = useState<RelatedArtist[]>([]);
   const [isLoadingAlbums, setIsLoadingAlbums] = useState(false);
   const [isLoadingRelationships, setIsLoadingRelationships] = useState(false);
+  const searchParams = useSearchParams();
+  const artistParam = searchParams.get("artist");
   const [selectedApiArtist, setSelectedApiArtist] =
   useState<MusicBrainzArtist | null>(null);
   const generatedConnections = selectedApiArtist
@@ -395,6 +458,16 @@ export default function LineageFinder() {
   const artistContext = selectedApiArtist
   ? getArtistContext(selectedApiArtist)
   : "";
+  const apiArtistLocation = selectedApiArtist
+  ? selectedApiArtist["begin-area"]?.name ||
+    selectedApiArtist.area?.name ||
+    selectedApiArtist.country ||
+    ""
+  : "";
+
+const apiArtistMapPlaceId = getMapPlaceFromLocation(
+  apiArtistLocation
+);
   const selectedConceptData = selectedConcept
   ? lineageConcepts.find(
       (concept) => concept.name === selectedConcept
@@ -412,6 +485,32 @@ export default function LineageFinder() {
       ).values()
     ).sort((a, b) => a.year - b.year)
   : [];
+
+  useEffect(() => {
+  if (!artistParam) return;
+
+  const matchingArtist = artists.find(
+    (artist) =>
+      artist.name.toLowerCase() === artistParam.toLowerCase()
+  );
+
+  // Curated artist → open profile immediately
+  if (matchingArtist) {
+    setSearch(matchingArtist.name);
+    setSelectedArtistId(matchingArtist.id);
+    setSelectedApiArtist(null);
+    setApiResults([]);
+    return;
+  }
+
+  // Non-curated artist → search MusicBrainz automatically
+setSearch(artistParam);
+setSelectedArtistId("");
+setSelectedApiArtist(null);
+setApiResults([]);
+
+searchArtists(artistParam);
+}, [artistParam]);
 
   const selectedArtist = artists.find(
     (artist) => artist.id === selectedArtistId
@@ -471,14 +570,16 @@ export default function LineageFinder() {
     }
   }
 
-  async function searchArtists() {
-  if (!search.trim()) return;
+  async function searchArtists(query?: string) {
+  const searchTerm = query ?? search;
+
+  if (!searchTerm.trim()) return;
 
   setIsSearching(true);
 
   try {
     const response = await fetch(
-      `/api/artists?q=${encodeURIComponent(search)}`
+      `/api/artists?q=${encodeURIComponent(searchTerm)}`
     );
 
     const data = await response.json();
@@ -513,7 +614,7 @@ export default function LineageFinder() {
     <button
   type="button"
   className="artist-search-button"
-  onClick={searchArtists}
+  onClick={() => searchArtists()}
   disabled={isSearching}
 >
   {isSearching ? "Searching..." : "Search"}
@@ -574,6 +675,8 @@ if (localArtist) {
   </div>
 </div>
 
+
+
 {selectedApiArtist && !selectedArtist && (
   <div className="lineage-result">
     <header className="artist-header artist-snapshot">
@@ -623,17 +726,39 @@ if (localArtist) {
   </p>
 </header>
 
+{apiArtistMapPlaceId && (
+  <section className="artist-geography compact-geography">
+    <p className="section-label">YOUR HIP-HOP GEOGRAPHY</p>
+
+    <p className="geography-location">
+      {apiArtistLocation}
+      <span> · </span>
+      {artistContext}
+    </p>
+
+    <Link
+      href={`/regions?place=${apiArtistMapPlaceId}`}
+      className="artist-map-link"
+    >
+      EXPLORE ON THE MAP →
+    </Link>
+  </section>
+)}
+
 <section className="artist-discography">
-  <p className="section-label">DISCOGRAPHY</p>
+  <p className="section-label">SELECTED RELEASES</p>
   <h3>Albums</h3>
 
   {isLoadingAlbums ? (
     <p>Loading albums...</p>
   ) : albums.length > 0 ? (
-    <div className="album-list">
+    <div className="compact-album-grid">
       {albums.map((album) => (
-        <article className="album-item" key={album.id}>
-          <span className="album-year">
+        <article
+          className="compact-album-item"
+          key={album.id}
+        >
+          <span className="compact-album-year">
             {album.date ? album.date.slice(0, 4) : "—"}
           </span>
 
@@ -642,7 +767,7 @@ if (localArtist) {
       ))}
     </div>
   ) : (
-    <p>No albums found.</p>
+    <p>No releases found.</p>
   )}
 </section>
 
@@ -725,33 +850,60 @@ if (localArtist) {
             </p>
 
             {concept ? (
-  <button
-    type="button"
-    className="lineage-concept-button"
-    onClick={() =>
-      setSelectedConcept(
-        selectedConcept === concept.name
-          ? null
-          : concept.name
-      )
-    }
-  >
-    <h4>{step}</h4>
+  <>
+    <h4 className="lineage-concept-title">{step}</h4>
 
-    <span>
+    <p className="lineage-description">
+      {concept.description}
+    </p>
+
+    <button
+      type="button"
+      className="lineage-archive-link"
+      onClick={() =>
+        setSelectedConcept(
+          selectedConcept === concept.name
+            ? null
+            : concept.name
+        )
+      }
+    >
       {selectedConcept === concept.name
-        ? "CLOSE ARCHIVE"
-        : "EXPLORE IN ARCHIVE →"}
-    </span>
-  </button>
-) : (
-  <h4>{step}</h4>
-)}
+        ? "CLOSE ARCHIVE ↑"
+        : "EXPLORE THIS HISTORY →"}
+    </button>
 
-{concept && (
-  <p className="lineage-description">
-    {concept.description}
-  </p>
+    {selectedConcept === concept.name && (
+      <div className="inline-concept-archive">
+        <p className="section-label">FROM THE ARCHIVE</p>
+
+        <div className="inline-archive-events">
+          {timelineEvents
+            .filter((event) =>
+              event.lineageConcepts?.includes(concept.id)
+            )
+            .sort((a, b) => a.year - b.year)
+            .map((event) => (
+              <article
+                className="inline-archive-event"
+                key={event.id}
+              >
+                <span>
+                  {event.year}
+                  {event.endYear && `–${event.endYear}`}
+                </span>
+
+                <h5>{event.title}</h5>
+
+                <p>{event.significance}</p>
+              </article>
+            ))}
+        </div>
+      </div>
+    )}
+  </>
+) : (
+  <h4 className="lineage-concept-title">{step}</h4>
 )}
           </div>
         </div>
@@ -768,29 +920,47 @@ if (localArtist) {
       {/* Results */}
       {selectedArtist && (
         <div className="lineage-result">
-          {/* Artist information */}
-          <header className="artist-header">
-            <p className="section-label">YOUR ARTIST</p>
+ 
+        {/* Artist information */}
+<header className="artist-header streamlined-artist-profile">
+  <p className="section-label">ARTIST SNAPSHOT</p>
 
-            <h2>{selectedArtist.name}</h2>
+  <h2>{selectedArtist.name}</h2>
 
-            <p className="artist-location">
-              {selectedArtist.region} · {selectedArtist.location} ·{" "}
-              {selectedArtist.era}
-            </p>
+  <div className="artist-quick-info">
+    <span>{selectedArtist.location}</span>
+    <span>·</span>
+    <span>{selectedArtist.region}</span>
+    <span>·</span>
+    <span>{selectedArtist.era}</span>
+  </div>
 
-            <p className="artist-description">
-              {selectedArtist.description}
-            </p>
-          </header>
+  <p className="streamlined-artist-description">
+    {selectedArtist.description}
+  </p>
+</header>
 
-          {/* Themes */}
-          <div className="artist-themes">
-            {selectedArtist.themes.map((theme) => (
-              <span key={theme}>{theme}</span>
-            ))}
-          </div>
-          {/* Artist relationships */}
+{/* Geography */}
+{selectedArtist.mapPlaceId && (
+  <section className="artist-geography compact-geography">
+    <p className="section-label">YOUR HIP-HOP GEOGRAPHY</p>
+
+    <p className="geography-location">
+      {selectedArtist.location}
+      <span> · </span>
+      {selectedArtist.region}
+    </p>
+
+    <Link
+      href={`/regions?place=${selectedArtist.mapPlaceId}`}
+      className="artist-map-link"
+    >
+      EXPLORE ON THE MAP →
+    </Link>
+  </section>
+)}
+
+{/* Artist connections */}
 <section className="artist-relationships">
   <p className="section-label">ARTIST CONNECTIONS</p>
 
@@ -838,6 +1008,7 @@ if (localArtist) {
     <p>No group or member information found.</p>
   )}
 </section>
+
           {/* Discography */}
 <section className="artist-discography">
   <p className="section-label">DISCOGRAPHY</p>
@@ -846,17 +1017,17 @@ if (localArtist) {
   {isLoadingAlbums ? (
     <p>Loading albums...</p>
   ) : albums.length > 0 ? (
-    <div className="album-list">
-      {albums.map((album) => (
-        <article className="album-item" key={album.id}>
-          <span className="album-year">
-            {album.date ? album.date.slice(0, 4) : "—"}
-          </span>
+    <div className="compact-album-grid">
+  {albums.map((album) => (
+    <article className="compact-album-item" key={album.id}>
+      <span className="compact-album-year">
+        {album.date ? album.date.slice(0, 4) : "—"}
+      </span>
 
-          <h4>{album.title}</h4>
-        </article>
-      ))}
-    </div>
+      <h4>{album.title}</h4>
+    </article>
+  ))}
+</div>
   ) : (
     <p>No albums found.</p>
   )}
@@ -865,12 +1036,19 @@ if (localArtist) {
           {/* Lineage */}
        <section className="lineage-path">
   <div className="lineage-heading">
-    <p className="section-label">YOUR HIP-HOP LINEAGE</p>
+  <p className="section-label">YOUR HISTORICAL LINEAGE</p>
 
-    <h3>
-      How {selectedArtist.name} connects to hip-hop history.
-    </h3>
-  </div>
+  <h3>
+    Trace {selectedArtist.name} through the sounds, places, and movements
+    that shaped hip-hop.
+  </h3>
+
+  <p className="lineage-intro">
+    These connections place {selectedArtist.name} within broader traditions
+    represented throughout the archive. Explore each connection to see the
+    historical moments behind it.
+  </p>
+</div>
 
   <div className="lineage-steps">
     {selectedArtist.lineage.map((step, index) => {
@@ -899,35 +1077,63 @@ if (localArtist) {
                 : "HISTORICAL CONNECTION"}
             </p>
 
-            {concept ? (
-              <button
-                type="button"
-                className="lineage-concept-button"
-                onClick={() =>
-                  setSelectedConcept(
-                    selectedConcept === concept.name
-                      ? null
-                      : concept.name
-                  )
-                }
+          {concept ? (
+  <>
+    <h4 className="lineage-concept-title">{step}</h4>
+
+    <p className="lineage-description">
+      {concept.description}
+    </p>
+
+    <button
+      type="button"
+      className="lineage-archive-link"
+      onClick={() =>
+        setSelectedConcept(
+          selectedConcept === concept.name
+            ? null
+            : concept.name
+        )
+      }
+    >
+      {selectedConcept === concept.name
+        ? "CLOSE ARCHIVE ↑"
+        : "EXPLORE THIS HISTORY →"}
+    </button>
+
+    {selectedConcept === concept.name && (
+      <div className="inline-concept-archive">
+        <p className="section-label">FROM THE ARCHIVE</p>
+
+        <div className="inline-archive-events">
+          {timelineEvents
+            .filter((event) =>
+              event.lineageConcepts?.includes(concept.id)
+            )
+            .sort((a, b) => a.year - b.year)
+            .map((event) => (
+              <article
+                className="inline-archive-event"
+                key={event.id}
               >
-                <h4>{step}</h4>
-
                 <span>
-                  {selectedConcept === concept.name
-                    ? "CLOSE ARCHIVE"
-                    : "EXPLORE IN ARCHIVE →"}
+                  {event.year}
+                  {event.endYear && `–${event.endYear}`}
                 </span>
-              </button>
-            ) : (
-              <h4>{step}</h4>
-            )}
 
-            {concept && (
-              <p className="lineage-description">
-                {concept.description}
-              </p>
-            )}
+                <h5>{event.title}</h5>
+
+                <p>{event.significance}</p>
+              </article>
+            ))}
+        </div>
+      </div>
+    )}
+  </>
+) : (
+  <h4 className="lineage-concept-title">{step}</h4>
+)}
+            
           </div>
         </div>
       );
@@ -935,52 +1141,30 @@ if (localArtist) {
   </div>
 </section>
 
-          {/* Related timeline events */}
-          <section className="lineage-events">
-            <p className="section-label">EXPLORE THE HISTORY</p>
+          {/* Artist-specific archive moments */}
+<section className="lineage-events">
+  <p className="section-label">KEY MOMENTS</p>
 
-            <h3>Connected Moments in the Archive</h3>
+  <h3>{selectedArtist.name} in the Archive</h3>
 
-            <div className="connected-events">
-              {relatedEvents.map((event) => (
-                <article key={event.id}>
-                  <span>{event.year}</span>
+  <p className="key-moments-intro">
+    Selected moments that place {selectedArtist.name} directly within
+    the history documented throughout the archive.
+  </p>
 
-                  <h4>{event.title}</h4>
+  <div className="connected-events">
+    {relatedEvents.map((event) => (
+      <article key={event.id}>
+        <span>{event.year}</span>
 
-                  <p>{event.significance}</p>
-                </article>
-              ))}
-            </div>
-          </section>
+        <h4>{event.title}</h4>
+
+        <p>{event.significance}</p>
+      </article>
+    ))}
+  </div>
+</section>
         </div>
-      )}
-
-      {selectedConceptData && (
-        <section className="concept-archive">
-          <div className="concept-archive-header">
-            <p className="section-label">FROM THE ARCHIVE</p>
-            <h3>{selectedConceptData.name}</h3>
-            <p>{selectedConceptData.description}</p>
-          </div>
-
-          {conceptEvents.length > 0 ? (
-            <div className="connected-events">
-              {conceptEvents.map((event) => (
-                <article key={event.id}>
-                  <span>
-                    {event.year}
-                    {event.endYear && `–${event.endYear}`}
-                  </span>
-                  <h4>{event.title}</h4>
-                  <p>{event.significance}</p>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <p>No archive events are currently connected to this concept.</p>
-          )}
-        </section>
       )}
     </section>
   );

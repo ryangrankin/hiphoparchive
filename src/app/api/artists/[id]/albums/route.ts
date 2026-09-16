@@ -1,5 +1,20 @@
 import { NextResponse } from "next/server";
 
+type ReleaseGroup = {
+  id: string;
+  title: string;
+  "first-release-date"?: string;
+  "primary-type"?: string;
+  "secondary-types"?: string[];
+  "artist-credit"?: {
+    artist?: {
+      id?: string;
+      name?: string;
+    };
+    name?: string;
+  }[];
+};
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -24,15 +39,6 @@ export async function GET(
 
     const data = await response.json();
 
-    const albums = (data["release-groups"] ?? [])
-      .filter(
-  (releaseGroup: {
-    "primary-type"?: string;
-    "secondary-types"?: string[];
-  }) => {
-    const primaryType = releaseGroup["primary-type"];
-    const secondaryTypes = releaseGroup["secondary-types"] ?? [];
-
     const excludedTypes = [
       "Compilation",
       "DJ-mix",
@@ -43,40 +49,65 @@ export async function GET(
       "Spokenword",
     ];
 
-    return (
-      primaryType === "Album" &&
-      !secondaryTypes.some((type) =>
-        excludedTypes.includes(type)
-      )
-    );
-  }
-)
-      .map(
-        (releaseGroup: {
-          id: string;
-          title: string;
-          "first-release-date"?: string;
-          "primary-type"?: string;
-        }) => ({
-          id: releaseGroup.id,
-          title: releaseGroup.title,
-          date: releaseGroup["first-release-date"] ?? "",
-          type: releaseGroup["primary-type"] ?? "Album",
-        })
-      )
-      .sort(
-        (
-          a: { date: string },
-          b: { date: string }
-        ) => a.date.localeCompare(b.date)
-      );
+    const filteredAlbums = (data["release-groups"] ?? [])
+      .filter((releaseGroup: ReleaseGroup) => {
+        const primaryType = releaseGroup["primary-type"];
+        const secondaryTypes =
+          releaseGroup["secondary-types"] ?? [];
 
-    return NextResponse.json({ albums });
+        const hasExcludedType = secondaryTypes.some((type) =>
+          excludedTypes.includes(type)
+        );
+
+        const hasDate = Boolean(
+          releaseGroup["first-release-date"]
+        );
+
+        return (
+            primaryType === "Album" &&
+            !hasExcludedType &&
+            hasDate
+        );
+      })
+      .map((releaseGroup: ReleaseGroup) => ({
+        id: releaseGroup.id,
+        title: releaseGroup.title,
+        date: releaseGroup["first-release-date"] ?? "",
+        type: releaseGroup["primary-type"] ?? "Album",
+      }));
+
+    // Remove duplicate title/year combinations
+    const uniqueAlbums = Array.from(
+      new Map(
+        filteredAlbums.map(
+          (album: {
+            id: string;
+            title: string;
+            date: string;
+            type: string;
+          }) => [
+            `${album.title.toLowerCase()}-${album.date.slice(0, 4)}`,
+            album,
+          ]
+        )
+      ).values()
+    );
+
+    uniqueAlbums.sort((a, b) =>
+      a.date.localeCompare(b.date)
+    );
+
+    return NextResponse.json({
+      albums: uniqueAlbums,
+    });
   } catch (error) {
     console.error("Album lookup failed:", error);
 
     return NextResponse.json(
-      { albums: [], error: "Unable to load discography." },
+      {
+        albums: [],
+        error: "Unable to load discography.",
+      },
       { status: 500 }
     );
   }

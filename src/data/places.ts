@@ -11,6 +11,7 @@ export type HipHopPlace = {
   themes: string[];
   timelineEventIds: string[];
   historicalLayers: HistoricalLayer[];
+  notableArtists: string[];
 };
 
 export type HistoricalLayer =
@@ -64,6 +65,18 @@ export const hipHopPlaces: HipHopPlace[] = [
   "soul-rnb",
   "hip-hop",
 ],
+notableArtists: [
+  "DJ Kool Herc",
+  "Grandmaster Flash",
+  "Afrika Bambaataa",
+  "Run-D.M.C.",
+  "Public Enemy",
+  "A Tribe Called Quest",
+  "Nas",
+  "The Notorious B.I.G.",
+  "Lauryn Hill",
+  "Nicki Minaj",
+],
   },
 
   {
@@ -96,6 +109,14 @@ export const hipHopPlaces: HipHopPlace[] = [
   "soul-rnb",
   "hip-hop",
 ],
+notableArtists: [
+  "N.W.A",
+  "Ice-T",
+  "Dr. Dre",
+  "Snoop Dogg",
+  "Tupac Shakur",
+  "Kendrick Lamar",
+],
   },
 
   {
@@ -122,6 +143,16 @@ export const hipHopPlaces: HipHopPlace[] = [
   "hip-hop",
 ],
     timelineEventIds: [],
+    notableArtists: [
+  "Too $hort",
+  "MC Hammer",
+  "Digital Underground",
+  "Hieroglyphics",
+  "The Coup",
+  "Del the Funky Homosapien",
+  "Mistah F.A.B.",
+  "Kamaiyah",
+],
   },
 
   {
@@ -155,6 +186,18 @@ export const hipHopPlaces: HipHopPlace[] = [
   "soul-rnb",
   "hip-hop",
 ],
+notableArtists: [
+  "Outkast",
+  "Goodie Mob",
+  "Lil Jon",
+  "T.I.",
+  "Gucci Mane",
+  "Young Jeezy",
+  "Future",
+  "Migos",
+  "Young Thug",
+  "Latto",
+],
   },
 
   {
@@ -185,6 +228,16 @@ export const hipHopPlaces: HipHopPlace[] = [
   "soul-rnb",
   "hip-hop",
 ],
+notableArtists: [
+  "DJ Jubilee",
+  "Mia X",
+  "Master P",
+  "Juvenile",
+  "B.G.",
+  "Lil Wayne",
+  "Big Freedia",
+  "Curren$y",
+],
   },
 
   {
@@ -212,6 +265,16 @@ export const hipHopPlaces: HipHopPlace[] = [
   "blues",
   "soul-rnb",
   "hip-hop",
+],
+notableArtists: [
+  "DJ Screw",
+  "Geto Boys",
+  "Scarface",
+  "UGK",
+  "Lil' Keke",
+  "Z-Ro",
+  "Paul Wall",
+  "Megan Thee Stallion",
 ],
   },
 
@@ -242,6 +305,16 @@ export const hipHopPlaces: HipHopPlace[] = [
   "blues",
   "soul-rnb",
   "hip-hop",
+],
+notableArtists: [
+  "DJ Spanish Fly",
+  "Three 6 Mafia",
+  "Gangsta Boo",
+  "Project Pat",
+  "8Ball & MJG",
+  "Yo Gotti",
+  "Young Dolph",
+  "GloRilla",
 ],
   },
 
@@ -277,6 +350,16 @@ export const hipHopPlaces: HipHopPlace[] = [
   "soul-rnb",
   "hip-hop",
 ],
+notableArtists: [
+  "Common",
+  "Kanye West",
+  "Lupe Fiasco",
+  "Twista",
+  "Chief Keef",
+  "Chance the Rapper",
+  "Noname",
+  "Lil Durk",
+],
   },
 
   {
@@ -302,6 +385,17 @@ export const hipHopPlaces: HipHopPlace[] = [
   "soul-rnb",
   "hip-hop",
 ],
+notableArtists: [
+  "2 Live Crew",
+  "Uncle Luke",
+  "Trick Daddy",
+  "Trina",
+  "Rick Ross",
+  "Flo Rida",
+  "Denzel Curry",
+  "City Girls",
+],
+
   },
   {
   id: "mississippi-delta",
@@ -328,6 +422,14 @@ export const hipHopPlaces: HipHopPlace[] = [
   timelineEventIds: [
   "blues-development",
   "great-migration",
+],
+notableArtists: [
+  "Charley Patton",
+  "Robert Johnson",
+  "Son House",
+  "Muddy Waters",
+  "B.B. King",
+  "Howlin' Wolf",
 ],
 },
 {
@@ -358,6 +460,16 @@ export const hipHopPlaces: HipHopPlace[] = [
   "rhythm-and-blues",
   "soul-music",
 ],
+notableArtists: [
+  "J Dilla",
+  "Slum Village",
+  "Eminem",
+  "D12",
+  "Royce da 5'9\"",
+  "Danny Brown",
+  "Big Sean",
+  "Tee Grizzley",
+],
 },{
   id: "philadelphia",
   city: "Philadelphia",
@@ -384,6 +496,16 @@ export const hipHopPlaces: HipHopPlace[] = [
   timelineEventIds: [
   "rhythm-and-blues",
   "soul-music",
+],
+notableArtists: [
+  "Schoolly D",
+  "DJ Jazzy Jeff & The Fresh Prince",
+  "The Roots",
+  "Black Thought",
+  "Eve",
+  "Beanie Sigel",
+  "Freeway",
+  "Meek Mill",
 ],
 },
 ];

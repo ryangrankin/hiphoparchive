@@ -8,6 +8,7 @@ export const artists: Artist[] = [
     era: "2010s–2020s",
     region: "West Coast",
     location: "Compton, California",
+    mapPlaceId: "los-angeles",
 
     description:
       "Kendrick Lamar combines detailed storytelling, political commentary, personal reflection, and experimentation with traditions of West Coast hip-hop and Black music.",
@@ -48,6 +49,34 @@ export const artists: Artist[] = [
       "kendrick-good-kid-maad-city",
       "kendrick-to-pimp-a-butterfly",
     ],
+
+    albums: [
+  {
+    title: "Section.80",
+    year: 2011,
+  },
+  {
+    title: "good kid, m.A.A.d city",
+    year: 2012,
+  },
+  {
+    title: "To Pimp a Butterfly",
+    year: 2015,
+  },
+  {
+    title: "DAMN.",
+    year: 2017,
+  },
+  {
+    title: "Mr. Morale & the Big Steppers",
+    year: 2022,
+  },
+  {
+    title: "GNX",
+    year: 2024,
+  },
+],
+
   },
 
   {
