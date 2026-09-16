@@ -1150,3 +1150,167 @@ main > h1 + p {
     gap: 1rem;
   }
 }
+
+/* ========================================
+   REGIONS & PLACE
+======================================== */
+
+.regions-hero {
+  padding: 7rem 5vw 5rem;
+  border-bottom: 1px solid #171717;
+}
+
+.regions-hero h1 {
+  font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  margin: 0.5rem 0 2rem;
+}
+
+.regions-hero > p:not(.section-label) {
+  max-width: 750px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.hip-hop-map-section {
+  padding: 5rem 5vw;
+}
+
+.map-heading {
+  max-width: 700px;
+  margin-bottom: 3rem;
+}
+
+.map-heading h2 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.map-heading > p:last-child {
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.map-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  border: 1px solid #171717;
+}
+
+.map-container {
+  min-width: 0;
+  border-right: 1px solid #171717;
+}
+
+.leaflet-map {
+  width: 100%;
+  height: 650px;
+  background: #e9e5dc;
+}
+
+.map-place-panel {
+  padding: 2.5rem;
+  min-height: 650px;
+}
+
+.map-empty-state {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.map-empty-state span,
+.map-place-heading > span,
+.map-place-themes > span,
+.map-related-events > span {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
+}
+
+.map-empty-state p {
+  max-width: 300px;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+.map-place-heading {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #171717;
+}
+
+.map-place-heading h3 {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  margin: 0 0 0.75rem;
+}
+
+.map-place-heading p {
+  margin: 0;
+}
+
+.map-place-description {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  padding: 2rem 0;
+}
+
+.map-place-themes {
+  padding: 2rem 0;
+  border-top: 1px solid #171717;
+}
+
+.map-related-events {
+  padding-top: 2rem;
+  border-top: 1px solid #171717;
+}
+
+.map-related-event {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(23, 23, 23, 0.2);
+}
+
+.map-related-event > span {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.map-related-event h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.map-related-event p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .map-container {
+    border-right: none;
+    border-bottom: 1px solid #171717;
+  }
+
+  .leaflet-map {
+    height: 500px;
+  }
+
+  .map-place-panel {
+    min-height: auto;
+  }
+}

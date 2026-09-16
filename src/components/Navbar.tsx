@@ -6,6 +6,7 @@ export default function Navbar() {
   <Link href="/">History</Link>
   <Link href="/women">Women in Hip-Hop</Link>
   <Link href="/lineage">Trace Artists Musical Lineage</Link>
+  <Link href="/regions">Explore Regions & Place</Link>
 </div>
   );
 }
