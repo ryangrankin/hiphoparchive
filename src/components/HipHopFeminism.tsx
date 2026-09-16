@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { feminismConcepts } from "@/data/feminismConcepts";
+import { timelineEvents } from "@/data/timeline";
 
 export default function HipHopFeminism() {
   const [selectedConcept, setSelectedConcept] = useState<string | null>(null);
@@ -9,6 +10,15 @@ export default function HipHopFeminism() {
   const activeConcept = feminismConcepts.find(
     (concept) => concept.id === selectedConcept
   );
+  
+  const relatedEvents = activeConcept
+  ? activeConcept.relatedTimelineEvents
+      .map((id) =>
+        timelineEvents.find((event) => event.id === id)
+      )
+      .filter((event) => event !== undefined)
+      .sort((a, b) => a.year - b.year)
+  : [];
 
   return (
     <section className="feminism-section">
@@ -95,6 +105,35 @@ export default function HipHopFeminism() {
               </ul>
             </div>
           </div>
+          <div className="feminism-archive-connections">
+  <div className="archive-connections-heading">
+    <p className="section-label">READ THE ARCHIVE THROUGH THIS LENS</p>
+
+    <h3>Connected Moments</h3>
+
+    <p>
+      These moments are not examples with a single fixed meaning.
+      They provide historical material that can be examined through
+      this interpretive framework.
+    </p>
+  </div>
+
+  <div className="feminism-event-list">
+    {relatedEvents.map((event) => (
+      <article className="feminism-event" key={event.id}>
+        <span className="feminism-event-year">
+          {event.year}
+          {event.endYear && `–${event.endYear}`}
+        </span>
+
+        <div>
+          <h4>{event.title}</h4>
+          <p>{event.significance}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</div>
         </article>
       )}
     </section>

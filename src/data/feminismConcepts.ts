@@ -5,6 +5,7 @@ export type FeminismConcept = {
   description: string;
   themes: string[];
   scholars: string[];
+  relatedTimelineEvents: string[];
 };
 
 export const feminismConcepts: FeminismConcept[] = [
@@ -23,6 +24,13 @@ export const feminismConcepts: FeminismConcept[] = [
       "gender",
     ],
     scholars: ["Treva B. Lindsey"],
+    relatedTimelineEvents: [
+  "funky-four-plus-one",
+  "roxanne-shante-1984",
+  "mc-lyte-1987",
+  "queen-latifah-1989",
+  "missy-elliott-supa-dupa-fly",
+],
   },
 
   {
@@ -45,6 +53,11 @@ export const feminismConcepts: FeminismConcept[] = [
       "Brittney C. Cooper",
       "Susana M. Morris",
     ],
+    relatedTimelineEvents: [
+  "queen-latifah-unity",
+  "lauryn-hill-miseducation",
+  "nicki-minaj-pink-friday",
+],
   },
 
   {
@@ -68,6 +81,11 @@ export const feminismConcepts: FeminismConcept[] = [
       "Brittney C. Cooper",
       "Susana M. Morris",
     ],
+    relatedTimelineEvents: [
+  "queen-latifah-unity",
+  "lil-kim-hard-core",
+  "women-rap-expansion-2020s",
+],
   },
 
   {
@@ -90,6 +108,12 @@ export const feminismConcepts: FeminismConcept[] = [
       "Bettina Love",
       "Treva B. Lindsey",
     ],
+    relatedTimelineEvents: [
+  "lil-kim-hard-core",
+  "cardi-b-bodak-yellow",
+  "megan-thee-stallion-breakthrough",
+],
+
   },
 
   {
@@ -111,6 +135,11 @@ export const feminismConcepts: FeminismConcept[] = [
       "Joan Morgan",
       "Treva B. Lindsey",
     ],
+    relatedTimelineEvents: [
+  "queen-latifah-1989",
+  "lauryn-hill-miseducation",
+  "lil-kim-hard-core",
+],
   },
 
   {
@@ -133,6 +162,12 @@ export const feminismConcepts: FeminismConcept[] = [
       "Brittney C. Cooper",
       "Susana M. Morris",
     ],
+    relatedTimelineEvents: [
+  "cardi-b-bodak-yellow",
+  "megan-thee-stallion-breakthrough",
+  "megan-savage-2020",
+  "women-rap-expansion-2020s",
+],
   },
 
   {
@@ -151,5 +186,10 @@ export const feminismConcepts: FeminismConcept[] = [
       "performance",
     ],
     scholars: ["Bettina Love"],
+    relatedTimelineEvents: [
+  "women-rap-expansion-2020s",
+  "lil-nas-x-2021",
+  "doechii-2025",
+],
   },
 ];
