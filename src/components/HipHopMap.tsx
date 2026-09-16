@@ -9,12 +9,54 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-import { hipHopPlaces, HipHopPlace } from "@/data/places";
+import {
+  hipHopPlaces,
+  HipHopPlace,
+  HistoricalLayer,
+} from "@/data/places";
 import { timelineEvents } from "@/data/timeline";
+
 
 export default function HipHopMap() {
   const [selectedPlace, setSelectedPlace] =
     useState<HipHopPlace | null>(null);
+
+  const [selectedRegion, setSelectedRegion] = useState("All");
+
+  const [selectedLayer, setSelectedLayer] =
+    useState<HistoricalLayer | "all">("all");
+
+  const regions = [
+    "All",
+    "East Coast",
+    "West Coast",
+    "South",
+    "Midwest",
+  ];
+
+  const historicalLayers: {
+    label: string;
+    value: HistoricalLayer | "all";
+  }[] = [
+    { label: "All", value: "all" },
+    { label: "Migration", value: "migration" },
+    { label: "Blues", value: "blues" },
+    { label: "Jazz", value: "jazz" },
+    { label: "Soul / R&B", value: "soul-rnb" },
+    { label: "Hip-Hop", value: "hip-hop" },
+  ];
+
+  const visiblePlaces = hipHopPlaces.filter((place) => {
+    const matchesRegion =
+      selectedRegion === "All" ||
+      place.region === selectedRegion;
+
+    const matchesLayer =
+      selectedLayer === "all" ||
+      place.historicalLayers.includes(selectedLayer);
+
+    return matchesRegion && matchesLayer;
+  });
 
   const relatedEvents = selectedPlace
     ? selectedPlace.timelineEventIds
@@ -35,7 +77,44 @@ export default function HipHopMap() {
           and regional histories connected to that place.
         </p>
       </div>
+    <div className="map-region-filters">
+        {regions.map((region) => (
+            <button
+             key={region}
+             type="button"
+             className={selectedRegion === region ? "active" : ""}
+             onClick={() => {
+                setSelectedRegion(region);
+                setSelectedPlace(null);
+            }}
+         >
+         {region}
+        </button>
+    ))}
+    </div>
+    <div className="map-layer-filter-section">
+  <span className="map-filter-label">
+    HISTORICAL LAYER
+  </span>
 
+  <div className="map-layer-filters">
+    {historicalLayers.map((layer) => (
+      <button
+        key={layer.value}
+        type="button"
+        className={
+          selectedLayer === layer.value ? "active" : ""
+        }
+        onClick={() => {
+          setSelectedLayer(layer.value);
+          setSelectedPlace(null);
+        }}
+      >
+        {layer.label}
+      </button>
+    ))}
+  </div>
+</div>
       <div className="map-layout">
         <div className="map-container">
           <MapContainer
@@ -50,7 +129,7 @@ export default function HipHopMap() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {hipHopPlaces.map((place) => (
+            {visiblePlaces.map((place) => (
               <CircleMarker
                 key={place.id}
                 center={[

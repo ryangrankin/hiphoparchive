@@ -1314,3 +1314,120 @@ main > h1 + p {
     min-height: auto;
   }
 }
+
+/* ========================================
+   MAP REGION FILTERS
+======================================== */
+
+.map-region-filters {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid #171717;
+  border-left: 1px solid #171717;
+}
+
+.map-region-filters button {
+  appearance: none;
+  background: transparent;
+  color: #171717;
+  font: inherit;
+  cursor: pointer;
+
+  padding: 1rem 1.5rem;
+
+  border: none;
+  border-right: 1px solid #171717;
+  border-bottom: 1px solid #171717;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.map-region-filters button:hover,
+.map-region-filters button.active {
+  background: #171717;
+  color: #f4f0e8;
+}
+
+@media (max-width: 700px) {
+  .map-region-filters {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .map-region-filters button {
+    width: 100%;
+    text-align: left;
+  }
+}
+/* ========================================
+   MAP HISTORICAL LAYERS
+======================================== */
+
+.map-layer-filter-section {
+  margin-top: 1.5rem;
+}
+
+.map-filter-label {
+  display: block;
+  margin-bottom: 0.75rem;
+
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.map-layer-filters {
+  display: flex;
+  flex-wrap: wrap;
+
+  border-top: 1px solid #171717;
+  border-left: 1px solid #171717;
+}
+
+.map-layer-filters button {
+  appearance: none;
+  background: transparent;
+  color: #171717;
+  font: inherit;
+  cursor: pointer;
+
+  padding: 0.9rem 1.3rem;
+
+  border: none;
+  border-right: 1px solid #171717;
+  border-bottom: 1px solid #171717;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.map-layer-filters button:hover,
+.map-layer-filters button.active {
+  background: #171717;
+  color: #f4f0e8;
+}
+
+@media (max-width: 700px) {
+  .map-layer-filters {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .map-layer-filters button {
+    width: 100%;
+    text-align: left;
+  }
+}

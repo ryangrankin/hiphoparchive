@@ -10,7 +10,15 @@ export type HipHopPlace = {
   description: string;
   themes: string[];
   timelineEventIds: string[];
+  historicalLayers: HistoricalLayer[];
 };
+
+export type HistoricalLayer =
+  | "migration"
+  | "blues"
+  | "jazz"
+  | "soul-rnb"
+  | "hip-hop";
 
 export const hipHopPlaces: HipHopPlace[] = [
   {
@@ -43,6 +51,12 @@ export const hipHopPlaces: HipHopPlace[] = [
       "grandmaster-flash-dj-techniques",
       "graffiti-hip-hop-culture",
     ],
+    historicalLayers: [
+  "migration",
+  "jazz",
+  "soul-rnb",
+  "hip-hop",
+],
   },
 
   {
@@ -70,6 +84,11 @@ export const hipHopPlaces: HipHopPlace[] = [
       "kendrick-good-kid-maad-city",
       "kendrick-to-pimp-a-butterfly",
     ],
+    historicalLayers: [
+  "migration",
+  "soul-rnb",
+  "hip-hop",
+],
   },
 
   {
@@ -90,6 +109,11 @@ export const hipHopPlaces: HipHopPlace[] = [
       "independent music",
       "authenticity",
     ],
+    historicalLayers: [
+  "migration",
+  "soul-rnb",
+  "hip-hop",
+],
     timelineEventIds: [],
   },
 
@@ -120,6 +144,10 @@ export const hipHopPlaces: HipHopPlace[] = [
       "snap-music-2005",
       "migos-trap-2013",
     ],
+    historicalLayers: [
+  "soul-rnb",
+  "hip-hop",
+],
   },
 
   {
@@ -143,6 +171,12 @@ export const hipHopPlaces: HipHopPlace[] = [
     timelineEventIds: [
       "juvenile-back-that-azz-up",
     ],
+    historicalLayers: [
+  "blues",
+  "jazz",
+  "soul-rnb",
+  "hip-hop",
+],
   },
 
   {
@@ -166,6 +200,11 @@ export const hipHopPlaces: HipHopPlace[] = [
       "megan-thee-stallion-breakthrough",
       "megan-savage-2020",
     ],
+    historicalLayers: [
+  "blues",
+  "soul-rnb",
+  "hip-hop",
+],
   },
 
   {
@@ -188,6 +227,11 @@ export const hipHopPlaces: HipHopPlace[] = [
     timelineEventIds: [
       "three-6-mafia-oscar",
     ],
+    historicalLayers: [
+  "blues",
+  "soul-rnb",
+  "hip-hop",
+],
   },
 
   {
@@ -210,6 +254,13 @@ export const hipHopPlaces: HipHopPlace[] = [
     timelineEventIds: [
       "chief-keef-drill-2012",
     ],
+    historicalLayers: [
+  "migration",
+  "blues",
+  "jazz",
+  "soul-rnb",
+  "hip-hop",
+],
   },
 
   {
@@ -231,5 +282,82 @@ export const hipHopPlaces: HipHopPlace[] = [
       "diaspora",
     ],
     timelineEventIds: [],
+    historicalLayers: [
+  "soul-rnb",
+  "hip-hop",
+],
   },
+  {
+  id: "mississippi-delta",
+  city: "Mississippi Delta",
+  state: "Mississippi",
+  region: "South",
+  coordinates: {
+    lat: 33.4101,
+    lng: -90.8976,
+  },
+  description:
+    "The Mississippi Delta is an important site in the history of African American blues traditions. Its musical history also intersects with the movement of Black communities from the South to northern and western cities during the Great Migration.",
+  themes: [
+    "blues",
+    "Black musical traditions",
+    "Great Migration",
+    "South",
+    "migration",
+  ],
+  historicalLayers: [
+    "migration",
+    "blues",
+  ],
+  timelineEventIds: [],
+},
+{
+  id: "detroit",
+  city: "Detroit",
+  state: "Michigan",
+  region: "Midwest",
+  coordinates: {
+    lat: 42.3314,
+    lng: -83.0458,
+  },
+  description:
+    "Detroit became a major destination during the Great Migration and an important center of Black urban culture and music. Motown helped reshape American popular music and expanded the national reach of soul and R&B.",
+  themes: [
+    "Great Migration",
+    "Motown",
+    "soul",
+    "R&B",
+    "Black urban culture",
+  ],
+  historicalLayers: [
+    "migration",
+    "soul-rnb",
+    "hip-hop",
+  ],
+  timelineEventIds: [],
+},{
+  id: "philadelphia",
+  city: "Philadelphia",
+  state: "Pennsylvania",
+  region: "East Coast",
+  coordinates: {
+    lat: 39.9526,
+    lng: -75.1652,
+  },
+  description:
+    "Philadelphia has played an important role in Black musical history through jazz, soul, R&B, and hip-hop. Its musical traditions demonstrate how regional scenes contributed to broader developments in Black American popular culture.",
+  themes: [
+    "jazz",
+    "Philadelphia soul",
+    "R&B",
+    "East Coast hip-hop",
+    "Black musical traditions",
+  ],
+  historicalLayers: [
+    "jazz",
+    "soul-rnb",
+    "hip-hop",
+  ],
+  timelineEventIds: [],
+},
 ];
