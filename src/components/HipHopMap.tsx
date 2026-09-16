@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   MapContainer,
   TileLayer,
   CircleMarker,
   Popup,
+  Polyline,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -15,6 +16,8 @@ import {
   HistoricalLayer,
 } from "@/data/places";
 import { timelineEvents } from "@/data/timeline";
+
+import { migrationRoutes } from "@/data/migrations";
 
 
 export default function HipHopMap() {
@@ -115,6 +118,26 @@ export default function HipHopMap() {
     ))}
   </div>
 </div>
+{selectedLayer === "migration" && (
+  <div className="migration-context">
+    <span>THE GREAT MIGRATION</span>
+
+    <p>
+      The Great Migration transformed the geography of Black life in the
+      United States as millions of African Americans moved from the South
+      to cities in the North, Midwest, and West during the twentieth
+      century. The routes shown here represent broad migration patterns,
+      not individual journeys.
+    </p>
+
+    <p>
+      These movements helped reshape Black urban communities and musical
+      cultures. The map places migration alongside blues, jazz, soul,
+      R&B, and hip-hop to explore how musical history is connected to
+      changing geographies of Black American life.
+    </p>
+  </div>
+)}
       <div className="map-layout">
         <div className="map-container">
           <MapContainer
@@ -128,6 +151,67 @@ export default function HipHopMap() {
               attribution="&copy; OpenStreetMap contributors"
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            {selectedLayer === "migration" &&
+  migrationRoutes.map((route) => (
+    <Polyline
+      key={route.id}
+      positions={[
+        route.from.coordinates,
+        route.to.coordinates,
+      ]}
+      pathOptions={{
+        color: "#171717",
+        weight: 2,
+        opacity: 0.7,
+        dashArray: "8 8",
+      }}
+    >
+      <Popup>
+        <div className="migration-popup">
+          <strong>{route.name}</strong>
+          <span>{route.period}</span>
+          <p>{route.description}</p>
+        </div>
+      </Popup>
+    </Polyline>
+  ))}
+  {selectedLayer === "migration" &&
+  migrationRoutes.map((route) => (
+    <div key={`${route.id}-points`}>
+      <CircleMarker
+        center={route.from.coordinates}
+        radius={5}
+        pathOptions={{
+          color: "#171717",
+          fillColor: "#f4f0e8",
+          fillOpacity: 1,
+          weight: 2,
+        }}
+      >
+        <Popup>
+          <strong>{route.from.name}</strong>
+          <br />
+          Migration origin
+        </Popup>
+      </CircleMarker>
+
+      <CircleMarker
+        center={route.to.coordinates}
+        radius={5}
+        pathOptions={{
+          color: "#171717",
+          fillColor: "#171717",
+          fillOpacity: 1,
+        }}
+      >
+        <Popup>
+          <strong>{route.to.name}</strong>
+          <br />
+          Migration destination
+        </Popup>
+      </CircleMarker>
+    </div>
+  ))}
 
             {visiblePlaces.map((place) => (
               <CircleMarker
