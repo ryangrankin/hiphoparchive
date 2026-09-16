@@ -1,4 +1,5 @@
 import WomenTimeline from "@/components/WomenTimeline";
+import HipHopFeminism from "@/components/HipHopFeminism"; 
 
 export default function WomenPage() {
   return (
@@ -63,20 +64,10 @@ export default function WomenPage() {
         </div>
       </section>
 
-      <section>
-        <header>
-            <h1> HIP HOP FEMINISM </h1>
-
-            <p className="hip-hop-feminism-intro">
-                Women's role in hip hop has not simply been passive. 
-                Female artists have shaped both hip hop culture and broader American culture, 
-                and solidified women's importance and place in hip hop.
-            </p>
-        </header>
-
-      </section>
-
       <WomenTimeline />
+    <HipHopFeminism />
+    
+
     </main>
   );
 }

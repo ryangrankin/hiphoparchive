@@ -868,3 +868,179 @@ main > h1 + p {
   max-width: 700px;
   line-height: 1.6;
 }
+
+/* ========================================
+   HIP-HOP FEMINISM
+======================================== */
+
+.feminism-section {
+  margin-top: 8rem;
+  padding-top: 5rem;
+  border-top: 1px solid #171717;
+}
+
+.feminism-header {
+  max-width: 850px;
+  margin-bottom: 4rem;
+}
+
+.feminism-header h2 {
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  margin: 0.5rem 0 2rem;
+}
+
+.feminism-intro {
+  max-width: 750px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+
+/* Concept cards */
+
+.feminism-concept-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid #171717;
+  border-left: 1px solid #171717;
+}
+
+.feminism-concept-card {
+  appearance: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  min-height: 260px;
+  padding: 2rem;
+
+  border: none;
+  border-right: 1px solid #171717;
+  border-bottom: 1px solid #171717;
+
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.feminism-concept-card:hover,
+.feminism-concept-card.active {
+  background: #171717;
+  color: #f4f0e8;
+}
+
+.concept-number {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 3rem;
+}
+
+.feminism-concept-card h3 {
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 0 0 1rem;
+}
+
+.feminism-concept-card p {
+  max-width: 450px;
+  line-height: 1.5;
+  margin: 0 0 2rem;
+}
+
+.concept-action {
+  margin-top: auto;
+  padding-top: 2rem;
+
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+
+/* Expanded interpretation */
+
+.feminism-concept-expanded {
+  padding: 4rem 0;
+  border-bottom: 1px solid #171717;
+
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+}
+
+.concept-expanded-heading h3 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-top: 0.75rem;
+}
+
+.concept-expanded-description {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  max-width: 700px;
+}
+
+.concept-expanded-details {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  padding-top: 2rem;
+}
+
+.concept-expanded-details > div > span {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-bottom: 1rem;
+}
+
+.concept-expanded-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.concept-expanded-details li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(23, 23, 23, 0.2);
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+  .feminism-section {
+    margin-top: 5rem;
+    padding-top: 3rem;
+  }
+
+  .feminism-concept-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feminism-concept-card {
+    min-height: 220px;
+  }
+
+  .feminism-concept-expanded {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .concept-expanded-details {
+    grid-column: 1;
+    grid-template-columns: 1fr;
+  }
+}
