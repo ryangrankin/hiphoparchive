@@ -832,7 +832,7 @@ if (localArtist) {
       )}
     </>
   ) : (
-    <p>No group or member information found.</p>
+    <p>No group / member information found.</p>
   )}
 </section>
 
@@ -985,7 +985,7 @@ if (localArtist) {
 {/* Geography */}
 {selectedArtist.mapPlaceId && (
   <section className="artist-geography compact-geography">
-    <p className="section-label">YOUR HIP-HOP GEOGRAPHY</p>
+    <p className="section-label"> HIP-HOP GEOGRAPHY</p>
 
     <p className="geography-location">
       {selectedArtist.location}
@@ -1030,7 +1030,7 @@ if (localArtist) {
 
       {groups.length > 0 && (
         <div className="relationship-group">
-          <h3>Groups / Projects</h3>
+          <h3>Groups & Projects</h3>
 
           <div className="relationship-list">
             {groups.map((group) => (
@@ -1088,7 +1088,7 @@ if (localArtist) {
 
   <p className="lineage-intro">
     These connections place {selectedArtist.name} within broader traditions
-    represented throughout the archive. Explore each connection to see the
+    represented throughout the archive. Click "explore the archive" to expand each connection and see the
     historical moments behind it.
   </p>
 </div>

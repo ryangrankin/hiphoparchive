@@ -5,7 +5,7 @@ import { timelineEvents } from "@/data/timeline";
 import { Era } from "@/types/timeline";
 
 const eras: { label: string; value: Era }[] = [
-  { label: "FOUNDATIONS", value: "foundations" },
+  { label: " HIP HOP FOUNDATIONS", value: "foundations" },
   { label: "1970s", value: "1970s" },
   { label: "1980s", value: "1980s" },
   { label: "1990s", value: "1990s" },

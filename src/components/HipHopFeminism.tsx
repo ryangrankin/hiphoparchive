@@ -31,12 +31,12 @@ export default function HipHopFeminism() {
           Women have been part of hip-hop since its beginnings, but documenting
           their participation is only part of the story. Hip-hop feminism
           provides a framework for examining how race, gender, sexuality,
-          representation, pleasure, and power operate within hip-hop culture.
+          representation, pleasure, and power operated historically within hip-hop culture.
         </p>
 
         <p className="feminism-intro">
           Rather than treating hip-hop as either empowering or oppressive,
-          these perspectives examine its contradictions and the ways Black
+          these perspectives examine the contradictions and ways that Black
           women and girls create, challenge, negotiate, and transform the
           culture.
         </p>
@@ -112,8 +112,8 @@ export default function HipHopFeminism() {
     <h3>Connected Moments</h3>
 
     <p>
-      These moments are not examples with a single fixed meaning.
-      They provide historical material that can be examined through
+      These examples are not fixed with a single meaning.
+      Examine the provided historical material that can be examined through
       this interpretive framework.
     </p>
   </div>
