@@ -15,6 +15,13 @@ type ReleaseGroup = {
   }[];
 };
 
+type Album = {
+  id: string;
+  title: string;
+  date: string;
+  type: string;
+};
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -84,26 +91,29 @@ export async function GET(
         type: releaseGroup["primary-type"] ?? "Album",
       }));
 
-    // Remove duplicate title/year combinations
-    const uniqueAlbums = Array.from(
-      new Map(
-        filteredAlbums.map(
-          (album: {
-            id: string;
-            title: string;
-            date: string;
-            type: string;
-          }) => [
-            `${album.title.toLowerCase()}-${album.date.slice(0, 4)}`,
-            album,
-          ]
-        )
-      ).values()
-    );
+      // Remove duplicate title/year combinations
+const albumMap = new Map<string, Album>();
 
-    uniqueAlbums.sort((a, b) =>
-      a.date.localeCompare(b.date)
-    );
+filteredAlbums.forEach((album: Album) => {
+  const key = `${album.title.toLowerCase()}-${album.date.slice(0, 4)}`;
+
+  if (!albumMap.has(key)) {
+    albumMap.set(key, album);
+  }
+});
+
+const uniqueAlbums = Array.from(albumMap.values());
+
+uniqueAlbums.sort((a, b) =>
+  a.date.localeCompare(b.date)
+);
+
+   uniqueAlbums.sort(
+  (
+    a: { id: string; title: string; date: string; type: string },
+    b: { id: string; title: string; date: string; type: string }
+  ) => a.date.localeCompare(b.date)
+);
 
     return NextResponse.json({
       albums: uniqueAlbums,
