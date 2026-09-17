@@ -6,13 +6,10 @@ type ReleaseGroup = {
   "first-release-date"?: string;
   "primary-type"?: string;
   "secondary-types"?: string[];
-  "artist-credit"?: {
-    artist?: {
-      id?: string;
-      name?: string;
-    };
-    name?: string;
-  }[];
+};
+
+type MusicBrainzResponse = {
+  "release-groups"?: ReleaseGroup[];
 };
 
 type Album = {
@@ -23,38 +20,43 @@ type Album = {
 };
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
 
   try {
     const response = await fetch(
-      `https://musicbrainz.org/ws/2/release-group?artist=${id}&type=album&limit=100&fmt=json`,
+      `https://musicbrainz.org/ws/2/release-group?artist=${encodeURIComponent(
+        id
+      )}&type=album&limit=100&fmt=json`,
       {
         headers: {
           "User-Agent": "HipHopArchive/1.0",
           Accept: "application/json",
         },
         cache: "no-store",
+        signal: AbortSignal.timeout(8000),
       }
     );
 
     if (!response.ok) {
-  console.warn(`MusicBrainz album lookup returned ${response.status}`);
+      console.warn(
+        `MusicBrainz album lookup returned ${response.status}`
+      );
 
-  return Response.json(
-    {
-      albums: [],
-      unavailable: true,
-    },
-    { status: 200 }
-  );
-}
+      return NextResponse.json(
+        {
+          albums: [],
+          unavailable: true,
+        },
+        { status: 200 }
+      );
+    }
 
-    const data = await response.json();
+    const data = (await response.json()) as MusicBrainzResponse;
 
-    const excludedTypes = [
+    const excludedTypes = new Set([
       "Compilation",
       "DJ-mix",
       "Live",
@@ -62,16 +64,19 @@ export async function GET(
       "Remix",
       "Soundtrack",
       "Spokenword",
-    ];
+    ]);
 
-    const filteredAlbums = (data["release-groups"] ?? [])
-      .filter((releaseGroup: ReleaseGroup) => {
+    const releaseGroups = data["release-groups"] ?? [];
+
+    const filteredAlbums: Album[] = releaseGroups
+      .filter((releaseGroup) => {
         const primaryType = releaseGroup["primary-type"];
+
         const secondaryTypes =
           releaseGroup["secondary-types"] ?? [];
 
         const hasExcludedType = secondaryTypes.some((type) =>
-          excludedTypes.includes(type)
+          excludedTypes.has(type)
         );
 
         const hasDate = Boolean(
@@ -79,55 +84,55 @@ export async function GET(
         );
 
         return (
-            primaryType === "Album" &&
-            !hasExcludedType &&
-            hasDate
+          primaryType === "Album" &&
+          !hasExcludedType &&
+          hasDate
         );
       })
-      .map((releaseGroup: ReleaseGroup) => ({
+      .map((releaseGroup) => ({
         id: releaseGroup.id,
         title: releaseGroup.title,
         date: releaseGroup["first-release-date"] ?? "",
         type: releaseGroup["primary-type"] ?? "Album",
       }));
 
-      // Remove duplicate title/year combinations
-const albumMap = new Map<string, Album>();
+    // Remove duplicate albums with the same title and release year.
+    const albumMap = new Map<string, Album>();
 
-filteredAlbums.forEach((album: Album) => {
-  const key = `${album.title.toLowerCase()}-${album.date.slice(0, 4)}`;
+    for (const album of filteredAlbums) {
+      const year = album.date.slice(0, 4);
 
-  if (!albumMap.has(key)) {
-    albumMap.set(key, album);
-  }
-});
+      const key = `${album.title
+        .toLowerCase()
+        .trim()}-${year}`;
 
-const uniqueAlbums = Array.from(albumMap.values());
+      if (!albumMap.has(key)) {
+        albumMap.set(key, album);
+      }
+    }
 
-uniqueAlbums.sort((a, b) =>
-  a.date.localeCompare(b.date)
-);
+    const uniqueAlbums: Album[] = Array.from(
+      albumMap.values()
+    );
 
-   uniqueAlbums.sort(
-  (
-    a: { id: string; title: string; date: string; type: string },
-    b: { id: string; title: string; date: string; type: string }
-  ) => a.date.localeCompare(b.date)
-);
+    // Sort albums chronologically.
+    uniqueAlbums.sort((a, b) =>
+      a.date.localeCompare(b.date)
+    );
 
     return NextResponse.json({
       albums: uniqueAlbums,
+      unavailable: false,
     });
   } catch (error) {
-  console.error("Relationship lookup unavailable:", error);
+    console.error("Album lookup unavailable:", error);
 
-  return Response.json(
-    {
-      members: [],
-      groups: [],
-      unavailable: true,
-    },
-    { status: 200 }
-  );
-}
+    return NextResponse.json(
+      {
+        albums: [],
+        unavailable: true,
+      },
+      { status: 200 }
+    );
+  }
 }
